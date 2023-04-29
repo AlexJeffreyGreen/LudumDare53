@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,15 +8,23 @@ public class Hand : MonoBehaviour
 
     [SerializeField] Card cardPrefab;
     [SerializeField] int handCount;
+    [SerializeField] float maxHandCount;
     [SerializeField] float spacing;
     [SerializeField] int selectedCardLayer;
     [SerializeField] int defaultLayer;
+    [SerializeField] int mousePositionToHandPosition = 350;
+    [SerializeField] float offScreenHandDestination;
+    [SerializeField] float defaultHandPosition;
     public List<Transform> Cards = new List<Transform>();
     public float radius = 2.0f;
     public float angleRange = 180f;
     public Transform selectedCard;
 
 
+    private void Awake()
+    {
+        //this.transform.position = new Vector3(0, defaultHandPosition, 0);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -30,8 +39,7 @@ public class Hand : MonoBehaviour
     private void PlaceCardsInHand()
     {
         Vector3 handPosition = this.transform.position;
-        float cardWidth = cardPrefab.GetBorderBounds().size.x;//cardPrefab.GetComponent<Renderer>().bounds.size.x;
-        float angle = angleRange / (Cards.Count - 1);
+        float cardWidth = cardPrefab.GetComponent<BoxCollider2D>().bounds.size.x;//.GetBorderBounds().size.x;
         float totalWidth = (Cards.Count - 1) * spacing;
 
 
@@ -60,7 +68,7 @@ public class Hand : MonoBehaviour
             Vector3 currentCardPosition = new Vector3(x, y + handPosition.y, 0);
             //new Vector3(handPosition.x + x, handPosition.y + y, 0);
             Cards[i].GetComponent<Card>().SetHandPosition(currentCardPosition);
-            Cards[i].transform.position = currentCardPosition;
+            Cards[i].transform.DOMove(currentCardPosition, .25f);//.position = currentCardPosition;
 
 
         }
@@ -73,24 +81,32 @@ public class Hand : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+  
+
+        //if (mousePosition.y < )
+
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 rayOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.zero);
             if (hit.collider != null && hit.collider.gameObject.tag == "Card")
             {
+
                 selectedCard = hit.collider.gameObject.transform;
                 selectedCard.GetComponent<Card>().ChangeLayerAndAllChildren(selectedCardLayer);
+                selectedCard.transform.SetParent(null);
                // selectedCard.gameObject.layer = selectedCardLayer;
             }
         }
         if (Input.GetMouseButtonUp(0))
         {
-            //hovering over graveyard
-            //selectedCard.gameObject.layer = defaultLayer;
-            selectedCard.GetComponent<Card>().ChangeLayerAndAllChildren(defaultLayer);
-            selectedCard = null; 
-            PlaceCardsInHand();
+            if (selectedCard != null)
+            {
+                selectedCard.GetComponent<Card>().ChangeLayerAndAllChildren(defaultLayer);
+                selectedCard.SetParent(transform);
+                selectedCard = null;
+                PlaceCardsInHand();
+            }
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
@@ -105,13 +121,36 @@ public class Hand : MonoBehaviour
 
     void FixedUpdate()
     {
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z = 10.0f;
+
+        Vector3 mouseToWorldPosition = Camera.main.ScreenToWorldPoint(mousePos);
         if (selectedCard != null)
         {
-            Vector3 mousePos = Input.mousePosition;
-            mousePos.z = 10.0f;
-            Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
-            selectedCard.transform.position = worldPos;
+            //Vector3 mousePos = Input.mousePosition;
+            //mousePos.z = 10.0f;
+            //Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+            selectedCard.transform.position = mouseToWorldPosition;
         }
+
+        //Vector3 mousePosition = Input.mousePosition;
+
+
+
+        //if (mouseToWorldPosition.y < defaultHandPosition)
+        //{
+        //    this.transform.DOMoveY(this.defaultHandPosition, 0.5f);
+        //}
+        //else
+        //{
+        //    this.transform.DOMoveY(this.offScreenHandDestination, 0.5f); 
+        //}
+
+        //Debug.Log(mousePosition);
+        //if (mousePosition.y > mousePositionToHandPosition)
+        //{
+        //this.transform.DOMoveY(this.transform.position.y + 100, 1);
+        //}
     }
 
 }
