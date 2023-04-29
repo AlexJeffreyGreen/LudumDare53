@@ -7,39 +7,31 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Card : MonoBehaviour
+public class Card : CardBase
 {
-    [SerializeField] Image portraitSpriteRenderer;
-    [SerializeField] Image borderRenderer;
-    [SerializeField] TMP_Text descriptionText;
+  
     [SerializeField] int value;
-    [SerializeField] new string name;
     [SerializeField] private float hoverHeight;
     private Vector3 handPosition;
-    private BoxCollider2D boxCollider2D;
-    private Canvas canvas;
-    private RectTransform rectTransform;
+    
     private bool isHovering;
     public void InitializeCard(CardData data)
     {
-        portraitSpriteRenderer.sprite = data.Image;
-        descriptionText.text = data.Description;
-        value = data.Value;
-        name = data.Name;
-        rectTransform = this.GetComponent<RectTransform>();
-        //Rect rect = rectTransform.rect;
-        //rect.height = 0;
-        //rect.width = 0;
-        rectTransform.sizeDelta = new Vector2(0,0);//.height = 0;
-
+        this.PortraitSpriteRenderer.sprite = data.Image;
+        this.DescriptionText.text = data.Description;
+        this.value = data.Value;
+        this.name = data.Name;
+        this.TitleText.text = data.Name;
     }
 
     private void Awake()
     {
         //bug
         this.GetComponent<Canvas>().worldCamera = Camera.main;
-        this.boxCollider2D = this.GetComponent<BoxCollider2D>();
-        this.canvas = this.GetComponent<Canvas>();
+        //this.BoxCollider2D = this.GetComponent<BoxCollider2D>();
+        ///this.Canvas = this.GetComponent<Canvas>();
+        //this.RectTransform = this.GetComponent<RectTransform>();
+        //this.RectTransform.sizeDelta = new Vector2(0, 0);//.height = 0;
     }
 
     //matter to other objs
@@ -91,11 +83,11 @@ public class Card : MonoBehaviour
 
     public void ChangeLayerAndAllChildren(int layer)
     {
-        this.canvas.sortingOrder = layer;
+        this.Canvas.sortingOrder = layer;
     }
 
     public Bounds GetBorderBounds()
     {
-        return this.boxCollider2D.bounds;
+        return this.BoxCollider2D.bounds;
     }
 }

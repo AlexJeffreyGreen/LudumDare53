@@ -1,3 +1,4 @@
+using Assets.Scripts.Deck;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -110,9 +111,7 @@ public class Hand : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            Card card = Instantiate<Card>(cardPrefab, this.transform);
-            Cards.Add(card.transform);
-            PlaceCardsInHand();
+            this.DrawCards(1, true);
         }
         //if (selectedCard != null)
         //    Debug.Log(selectedCard.gameObject.layer);
@@ -153,4 +152,16 @@ public class Hand : MonoBehaviour
         //}
     }
 
+
+    void DrawCards(int count, bool random)
+    {
+        CardData[] drawnCards = GameManager.Instance.RetrieveRandomCardData(count, random);
+        foreach (CardData data in drawnCards)
+        {
+            Card card = Instantiate<Card>(cardPrefab, this.transform);
+            card.InitializeCard(data);
+            Cards.Add(card.transform);
+        }
+        PlaceCardsInHand();
+    }
 }
