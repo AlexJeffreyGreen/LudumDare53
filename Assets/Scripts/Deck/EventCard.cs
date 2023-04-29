@@ -3,13 +3,65 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 namespace Assets.Scripts.Deck
 {
     public class EventCard : CardBase
     {
+        // public bool eventCard;
 
+        [SerializeField] TMP_Text HealthBarText;
+        [SerializeField] TMP_Text RunBarText;
+
+        private void Awake()
+        {
+          
+        }
+
+        public override void InitializeCard(CardData data)
+        {
+            base.InitializeCard(data);
+            this.UpdateInformationText();
+            //this
+        }
+
+        private void Update()
+        {
+            //if (Input.GetMouseButtonUp(0))
+            //{
+            //    Debug.Log("Released mouse above event card");
+            //}
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+           // Debug.Log("Entered event card");
+        }
+
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            //Debug.Log("Exited event card");            
+        }
+
+        public void Interact(Card card)
+        {
+            if (card.ResourceType != this.ResourceType) { return; }
+            this.Value -= card.Value;
+            this.UpdateInformationText();
+        }
+
+        void UpdateInformationText()
+        {
+            this.HealthBarText.text = this.Value.ToString();
+            this.RunBarText.text = this.RequirementValue.ToString();
+        }
+
+        private void OnDestroy()
+        {
+            
+        }
 
     }
 }

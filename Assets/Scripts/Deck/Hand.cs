@@ -37,7 +37,7 @@ public class Hand : MonoBehaviour
         }
     }
 
-    private void PlaceCardsInHand()
+    public void PlaceCardsInHand()
     {
         Vector3 handPosition = this.transform.position;
         float cardWidth = cardPrefab.GetComponent<BoxCollider2D>().bounds.size.x;//.GetBorderBounds().size.x;
@@ -101,18 +101,30 @@ public class Hand : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
-            if (selectedCard != null)
+            if (selectedCard != null && !selectedCard.GetComponent<Card>().HoveringOverEvent)
             {
                 selectedCard.GetComponent<Card>().ChangeLayerAndAllChildren(defaultLayer);
                 selectedCard.SetParent(transform);
                 selectedCard = null;
-                PlaceCardsInHand();
             }
+            else if (selectedCard != null && selectedCard.GetComponent<Card>().HoveringOverEvent)
+            {
+                GameManager.Instance.InteractWithEvent(selectedCard.GetComponent<Card>());
+                if(GameManager.Instance.CurrentEvent == null)
+                {
+                    Debug.Log("Destroyed!");
+                }
+                Cards.Remove(selectedCard);
+                Destroy(selectedCard.gameObject);
+                selectedCard = null;
+            }
+            PlaceCardsInHand();
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            this.DrawCards(1, true);
+          //  this.DrawCards(1, true);
         }
+
         //if (selectedCard != null)
         //    Debug.Log(selectedCard.gameObject.layer);
        
@@ -131,37 +143,8 @@ public class Hand : MonoBehaviour
             //Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
             selectedCard.transform.position = mouseToWorldPosition;
         }
-
-        //Vector3 mousePosition = Input.mousePosition;
-
-
-
-        //if (mouseToWorldPosition.y < defaultHandPosition)
-        //{
-        //    this.transform.DOMoveY(this.defaultHandPosition, 0.5f);
-        //}
-        //else
-        //{
-        //    this.transform.DOMoveY(this.offScreenHandDestination, 0.5f); 
-        //}
-
-        //Debug.Log(mousePosition);
-        //if (mousePosition.y > mousePositionToHandPosition)
-        //{
-        //this.transform.DOMoveY(this.transform.position.y + 100, 1);
-        //}
     }
 
 
-    void DrawCards(int count, bool random)
-    {
-        CardData[] drawnCards = GameManager.Instance.RetrieveRandomCardData(count, random);
-        foreach (CardData data in drawnCards)
-        {
-            Card card = Instantiate<Card>(cardPrefab, this.transform);
-            card.InitializeCard(data);
-            Cards.Add(card.transform);
-        }
-        PlaceCardsInHand();
-    }
+ 
 }

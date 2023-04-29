@@ -11,16 +11,42 @@ namespace Assets.Scripts.Deck
 {
     public abstract class CardBase : MonoBehaviour
     {
-        [SerializeField] private Image portraitSpriteRenderer;
-        [SerializeField] private Image borderRenderer;
+        [SerializeField] private ResourceType resourceType;
+        [SerializeField] private int value;
+        [SerializeField] private int requirementValue;
+        [SerializeField] private Image portraitImage;
+        [SerializeField] private Image borderImage;
+        [SerializeField] private Image titleImage;
+        [SerializeField] private Image descriptionImage;
+        [SerializeField] private Image backgroundImage;
         [SerializeField] private TMP_Text descriptionText;
         [SerializeField] private TMP_Text titleText;
         private BoxCollider2D boxCollider2D;
         private Canvas canvas;
         private RectTransform rectTransform;
 
-        protected Image PortraitSpriteRenderer { get { return this.portraitSpriteRenderer; } }
-        protected Image BorderRenderer { get { return this.borderRenderer; } }
+
+        public virtual void InitializeCard(CardData data)
+        {
+            this.PortraitImage.sprite = data.Image;
+            this.DescriptionText.text = data.Description;
+            this.BorderImage.sprite = data.BorderImage;
+            this.BackgroundImage.sprite = data.BackgroundImage;
+            this.TitleImage.sprite = data.TitleImage;
+            this.Value = data.Value;
+            this.RequirementValue = data.RequirementValue;
+            this.name = data.Name;
+            this.TitleText.text = data.Name;
+        }
+
+        public ResourceType ResourceType { get { return resourceType; } }
+        public int Value { get { return value; } set { this.value = value; } }
+        public int RequirementValue { get { return requirementValue; } set { this.requirementValue = value; } }
+        protected Image PortraitImage { get { return this.portraitImage; } }
+        protected Image BorderImage { get { return this.borderImage; } }
+        protected Image TitleImage { get { return this.titleImage; } }
+        protected Image BackgroundImage { get { return this.backgroundImage; } }    
+
         protected TMP_Text TitleText { get { return this.titleText; } }
         protected TMP_Text DescriptionText { get { return this.descriptionText; } }
         protected BoxCollider2D BoxCollider2D { get { if (this.boxCollider2D == null) { this.boxCollider2D = this.GetComponent<BoxCollider2D>(); } return this.boxCollider2D; } }

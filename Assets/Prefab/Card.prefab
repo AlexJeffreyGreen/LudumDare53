@@ -480,14 +480,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d11c676b79ecb49b55ff5154eac937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portraitSpriteRenderer: {fileID: 4775399819898841437}
-  borderRenderer: {fileID: 5392856369513356651}
+  value: 0
+  portraitImage: {fileID: 4775399819898841437}
+  borderImage: {fileID: 5392856369513356651}
+  titleImage: {fileID: 6115465292427614915}
+  descriptionImage: {fileID: 72665722426815919}
+  backgroundImage: {fileID: 4754270551611197235}
   descriptionText: {fileID: 2109384947457484820}
   titleText: {fileID: 6183508373750908262}
-  boxCollider2D: {fileID: 1014018519417869610}
-  canvas: {fileID: 6014383885279648001}
-  rectTransform: {fileID: 453815448904067211}
-  value: 0
   hoverHeight: 0.5
 --- !u!61 &1014018519417869610
 BoxCollider2D:
@@ -499,7 +499,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

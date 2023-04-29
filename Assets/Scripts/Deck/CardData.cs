@@ -13,6 +13,21 @@ namespace Assets.Scripts.Deck
         public string Name;
         public string Description;
         public int Value;
-        public Sprite Image; 
+        public int RequirementValue;
+        public Sprite Image;
+        public Sprite BackgroundImage;
+        public Sprite TitleImage;
+        public Sprite DescriptionImage;
+        public Sprite BorderImage;
+        public ResourceType ResourceType;
+    }
+
+    public enum ResourceType
+    {
+        Wood,
+        Food,
+        Water,
+        Weapon,
+        Shield
     }
 }

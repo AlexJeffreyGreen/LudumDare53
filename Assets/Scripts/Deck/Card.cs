@@ -10,28 +10,20 @@ using UnityEngine.UI;
 public class Card : CardBase
 {
   
-    [SerializeField] int value;
+    //[SerializeField] int value;
     [SerializeField] private float hoverHeight;
     private Vector3 handPosition;
     
     private bool isHovering;
-    public void InitializeCard(CardData data)
-    {
-        this.PortraitSpriteRenderer.sprite = data.Image;
-        this.DescriptionText.text = data.Description;
-        this.value = data.Value;
-        this.name = data.Name;
-        this.TitleText.text = data.Name;
-    }
+    public bool HoveringOverEvent;
+    //public void InitializeCard(CardData data) 
+    //{
+     
+    //}
 
     private void Awake()
     {
-        //bug
         this.GetComponent<Canvas>().worldCamera = Camera.main;
-        //this.BoxCollider2D = this.GetComponent<BoxCollider2D>();
-        ///this.Canvas = this.GetComponent<Canvas>();
-        //this.RectTransform = this.GetComponent<RectTransform>();
-        //this.RectTransform.sizeDelta = new Vector2(0, 0);//.height = 0;
     }
 
     //matter to other objs
@@ -43,7 +35,22 @@ public class Card : CardBase
     // Update is called once per frame
     void Update()
     {
-        
+
+        //if (Input.GetMouseButtonUp(0) && HoveringOverEvent)
+        //{
+        //    Destroy(this.gameObject);
+        //}
+
+
+        //if (Input.GetMouseButtonUp(0))
+        //{
+        //    Vector2 rayOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //    RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.zero);
+        //    if (hit.collider != null && hit.collider.gameObject.tag == "Event")
+        //    {
+        //        Debug.Log("Over event card and let go.");
+        //    }
+        //}
     }
 
     private void FixedUpdate()
@@ -72,13 +79,18 @@ public class Card : CardBase
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.tag == "Event")
+            HoveringOverEvent = true;
+
         //overlapping of graveyard
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-       // if (collision == null) return;
-       // Debug.Log("Card Exited Overlap with: " + collision.gameObject.name);
+        if (collision.gameObject.tag == "Event")
+            HoveringOverEvent = false;
+        // if (collision == null) return;
+        // Debug.Log("Card Exited Overlap with: " + collision.gameObject.name);
     }
 
     public void ChangeLayerAndAllChildren(int layer)
