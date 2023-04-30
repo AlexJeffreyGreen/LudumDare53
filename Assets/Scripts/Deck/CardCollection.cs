@@ -92,7 +92,7 @@ namespace Assets.Scripts.Deck
             CardData data = null;
             foreach(CardData card in cards.Where(x=>x.ResourceType == type))
             {
-                if (card.Value == value)
+                if (card.RequirementValue == value)
                 {
                     data = card; 
                     break;

@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Pond
   Description: Decent water source
-  Value: 1
-  RequirementValue: 1
+  RewardValue: 1
+  RequirementValue: 0
+  RunValue: 0
   Image: {fileID: -607008648, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   BackgroundImage: {fileID: -1348238638, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   TitleImage: {fileID: -1471863871, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
@@ -23,3 +24,4 @@ MonoBehaviour:
   BorderImage: {fileID: 1679396883, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   ResourceType: 2
   Boon: 1
+  CardType: 1

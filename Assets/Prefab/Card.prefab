@@ -480,7 +480,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d11c676b79ecb49b55ff5154eac937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  resourceType: 0
   value: 0
+  requirementValue: 0
   portraitImage: {fileID: 4775399819898841437}
   borderImage: {fileID: 5392856369513356651}
   titleImage: {fileID: 6115465292427614915}
@@ -488,7 +490,10 @@ MonoBehaviour:
   backgroundImage: {fileID: 4754270551611197235}
   descriptionText: {fileID: 2109384947457484820}
   titleText: {fileID: 6183508373750908262}
+  boon: 0
   hoverHeight: 0.5
+  HoveringOverEvent: 0
+  HoveringOverGraveyard: 0
 --- !u!61 &1014018519417869610
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -12,7 +12,8 @@ namespace Assets.Scripts.Deck
     public abstract class CardBase : MonoBehaviour
     {
         [SerializeField] private ResourceType resourceType;
-        [SerializeField] private int value;
+        [SerializeField] private int rewardValue;
+        [SerializeField] private int runValue;
         [SerializeField] private int requirementValue;
         [SerializeField] private Image portraitImage;
         [SerializeField] private Image borderImage;
@@ -22,6 +23,7 @@ namespace Assets.Scripts.Deck
         [SerializeField] private TMP_Text descriptionText;
         [SerializeField] private TMP_Text titleText;
         [SerializeField] private bool boon;
+        [SerializeField] private CardType cardType;
         private BoxCollider2D boxCollider2D;
         private Canvas canvas;
         private RectTransform rectTransform;
@@ -34,18 +36,37 @@ namespace Assets.Scripts.Deck
             this.BorderImage.sprite = data.BorderImage;
             this.BackgroundImage.sprite = data.BackgroundImage;
             this.TitleImage.sprite = data.TitleImage;
-            this.Value = data.Value;
-            this.RequirementValue = data.RequirementValue;
+            this.rewardValue = data.RewardValue;
+            this.requirementValue = data.RequirementValue;
+            this.runValue = data.RunValue;
             this.name = data.Name;
             this.TitleText.text = data.Name;
-            this.ResourceType = data.ResourceType;
+            this.resourceType = data.ResourceType;
             this.boon = data.Boon;
+            this.cardType = data.CardType;
         }
 
-        public bool Boon { get { return this.boon; } protected set { this.boon = value; } }
-        public ResourceType ResourceType { get { return resourceType; } private set { this.resourceType = value; } }
-        public int Value { get { return value; } protected set { this.value = value; } }
-        public int RequirementValue { get { return requirementValue; } private set { this.requirementValue = value; } }
+        /// <summary>
+        /// Returns a Card for loot.
+        /// </summary>
+        /// <param name="card"></param>
+        /// <returns></returns>
+        public virtual CardData Interact(CardBase card)
+        {
+            if (this.Boon) return CardCollection.Instance.RetrieveCardOfSpecificType(this.ResourceType, 1);
+            if (card == null) return null; 
+            if (card.ResourceType !=  this.ResourceType) return null;
+            this.requirementValue -= card.requirementValue;
+            if (this.requirementValue <= 0) return CardCollection.Instance.RetrieveRandomCardData(CardType.Card, 1, true).First();
+            return null;
+        }
+
+        public bool Boon { get { return this.boon; } }
+        public CardType CardType { get { return this.cardType; } }
+        public ResourceType ResourceType { get { return resourceType; }  }
+        public int RewardValue { get { return this.rewardValue; } }
+        public int RunValue { get { return this.runValue; }  }
+        public int RequirementValue { get { return requirementValue; } }
         protected Image PortraitImage { get { return this.portraitImage; } }
         protected Image BorderImage { get { return this.borderImage; } }
         protected Image TitleImage { get { return this.titleImage; } }
@@ -59,4 +80,5 @@ namespace Assets.Scripts.Deck
         protected Canvas Canvas { get { if (this.canvas == null) { this.canvas = this.GetComponent<Canvas>(); this.canvas.worldCamera = Camera.main; } return this.canvas; } }
     
     }
+
 }

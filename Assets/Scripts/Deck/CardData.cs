@@ -12,8 +12,9 @@ namespace Assets.Scripts.Deck
     {
         public string Name;
         public string Description;
-        public int Value;
+        public int RewardValue;
         public int RequirementValue;
+        public int RunValue;
         public Sprite Image;
         public Sprite BackgroundImage;
         public Sprite TitleImage;
@@ -21,6 +22,7 @@ namespace Assets.Scripts.Deck
         public Sprite BorderImage;
         public ResourceType ResourceType;
         public bool Boon;
+        public CardType CardType;
     }
 
     public enum ResourceType
@@ -31,4 +33,12 @@ namespace Assets.Scripts.Deck
         Weapon,
         Shield
     }
+
+    public enum CardType
+    {
+        Card,
+        Event,
+        Request
+    }
+
 }

@@ -21,7 +21,7 @@ public class Card : CardBase
     public override void InitializeCard(CardData data)
     {
         base.InitializeCard(data);
-        this.Boon = true;
+        //this.Boon = true;
     }
 
     private void Awake()
@@ -32,28 +32,13 @@ public class Card : CardBase
     //matter to other objs
     void Start()
     {
-       // Debug.Log(this.ResourceType.ToString());
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log("Hovering over graveyard: " + HoveringOverGraveyard);
-        //if (Input.GetMouseButtonUp(0) && HoveringOverEvent)
-        //{
-        //    Destroy(this.gameObject);
-        //}
 
-
-        //if (Input.GetMouseButtonUp(0))
-        //{
-        //    Vector2 rayOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //    RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.zero);
-        //    if (hit.collider != null && hit.collider.gameObject.tag == "Event")
-        //    {
-        //        Debug.Log("Over event card and let go.");
-        //    }
-        //}
     }
 
     private void FixedUpdate()
@@ -61,6 +46,7 @@ public class Card : CardBase
         
     }
 
+  
     public void SetHandPosition(Vector3 newPositon)
     {
         this.handPosition = newPositon;

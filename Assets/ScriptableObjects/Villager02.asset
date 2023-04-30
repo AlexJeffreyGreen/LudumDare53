@@ -14,11 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Broken Bridge
   Description: Bridge needs repairs
-  Value: 1
-  RequirementValue: 2
+  RewardValue: 1
+  RequirementValue: 1
+  RunValue: 2
   Image: {fileID: -940378559, guid: 4040dcf8f3d49a846a45e62d70767fab, type: 3}
   BackgroundImage: {fileID: 1997430822, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   TitleImage: {fileID: -1509057166, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   DescriptionImage: {fileID: 625507651, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   BorderImage: {fileID: 1679396883, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   ResourceType: 0
+  Boon: 0
+  CardType: 2

@@ -21,10 +21,10 @@ public class Hand : MonoBehaviour
     [SerializeField] int mousePositionToHandPosition = 350;
     [SerializeField] float offScreenHandDestination;
     [SerializeField] float defaultHandPosition;
-    public List<Transform> Cards = new List<Transform>();
+    public List<Card> Cards = new List<Card>();
     public float radius = 2.0f;
     public float angleRange = 180f;
-    public Transform selectedCard;
+    public Card selectedCard;
 
 
     private void Awake()
@@ -38,7 +38,7 @@ public class Hand : MonoBehaviour
         for (int i = 0; i < handCount; i++)
         {
             Card card = Instantiate<Card>(cardPrefab, this.transform);
-            Cards.Add(card.transform);
+            Cards.Add(card);
         }
     }
 
@@ -50,7 +50,7 @@ public class Hand : MonoBehaviour
 
 
         for (int i = 0; i < Cards.Count; i++)
-            totalWidth += Cards[i].GetComponent<Card>().GetBorderBounds().size.x;
+            totalWidth += Cards[i].GetBorderBounds().size.x;
 
         float startX = -totalWidth / 2f;
 
@@ -106,20 +106,20 @@ public class Hand : MonoBehaviour
         }
     }
 
-    public void SelectCard(Transform transform)
+    public void SelectCard(Card card)
     {
-        this.selectedCard = transform;
-        this.selectedCard.GetComponent<Card>().ChangeLayerAndAllChildren(selectedCardLayer);
+        this.selectedCard = card;
+        this.selectedCard.ChangeLayerAndAllChildren(selectedCardLayer);
         this.selectedCard.transform.SetParent(null);
         this.Cards.Remove(selectedCard);
     }
 
     public void DeselectCard(bool destroy = false)
     {
-        this.selectedCard.GetComponent<Card>().ChangeLayerAndAllChildren(defaultLayer);
-        this.selectedCard.SetParent(transform);
+        this.selectedCard.ChangeLayerAndAllChildren(defaultLayer);
+        this.selectedCard.transform.SetParent(transform);
 
-        if( destroy)
+        if(destroy)
         {
             Destroy(this.selectedCard.gameObject);
             //this.Cards.Remove(this.selectedCard);
@@ -135,19 +135,11 @@ public class Hand : MonoBehaviour
     /// </summary>
     /// <param name="transform"></param>
     /// <exception cref="NotImplementedException"></exception>
-    public void AddCard(Transform transform)
+    public void AddCard(CardData cardData)
     {
-        EventCard eventCard = transform.GetComponent<EventCard>();
-        if (eventCard == null) { throw new NotImplementedException("Maybe in the future you can add special cards."); }
-        //CardData data = new CardData();
-        
-
         Card card = Instantiate<Card>(cardPrefab, this.transform); 
-        CardData data = CardCollection.Instance.RetrieveCardOfSpecificType(eventCard.ResourceType, eventCard.Value);
-        card.InitializeCard(data);
-        //selectedCard = card.transform;
-        //Debug.Log("TODO: TEST HERE.");
-        Cards.Add(card.transform);
+        card.InitializeCard(cardData);
+        Cards.Add(card);
         this.PlaceCardsInHand();
     }
 }

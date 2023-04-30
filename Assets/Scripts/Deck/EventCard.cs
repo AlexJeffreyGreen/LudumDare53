@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Deck
 {
@@ -12,8 +13,12 @@ namespace Assets.Scripts.Deck
     {
         // public bool eventCard;
 
-        [SerializeField] TMP_Text HealthBarText;
-        [SerializeField] TMP_Text RunBarText;
+        [SerializeField] TMP_Text rewardText;
+        [SerializeField] TMP_Text runText;
+        [SerializeField] TMP_Text requirementText;
+        [SerializeField] Image rewardImage;
+        [SerializeField] Image runImage;
+        [SerializeField] Image requirementImage;
         public List<CardData> RewardData { get; private set; }
 
         private void Awake()
@@ -46,20 +51,18 @@ namespace Assets.Scripts.Deck
             //Debug.Log("Exited event card");            
         }
 
-        public bool Interact(Card card = null)
+        public override CardData Interact(CardBase card)
         {
-            if (card == null && this.Boon) { return true; }
-            if (card == null && !this.Boon) { return false; }
-            if (card.ResourceType != this.ResourceType) { return false; }
-            this.Value -= card.Value;
+            CardData result = base.Interact(card);
             this.UpdateInformationText();
-            return true;
+            return result;
         }
 
         void UpdateInformationText()
         {
-            this.HealthBarText.text = this.Value.ToString();
-            this.RunBarText.text = this.RequirementValue.ToString();
+            this.rewardText.text = $"+ {this.RewardValue.ToString()}";
+            this.runText.text = $"- {this.RunValue.ToString()}";
+            this.requirementText.text = this.RequirementValue.ToString();
         }
 
         private void OnDestroy()
