@@ -30,7 +30,7 @@ public class Card : CardBase
     //matter to other objs
     void Start()
     {
-        
+       // Debug.Log(this.ResourceType.ToString());
     }
 
     // Update is called once per frame

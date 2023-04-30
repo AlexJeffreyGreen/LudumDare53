@@ -43,13 +43,14 @@ public class GameManager : Singleton<GameManager>
                 }
                 else if (currentCard.HoveringOverEvent)
                 {
-                    this.InteractWithEvent(hand.selectedCard.GetComponent<Card>());
+                    //not super happy with this addition, but I will keep it because of the time restraint
+                    bool result = this.InteractWithEvent(hand.selectedCard.GetComponent<Card>());
                     if (this.CurrentEvent == null)
                     {
                         Debug.Log("Destroyed!");
                         this.SetGameMode(GameMode.Navigation);
                     }
-                    hand.DeselectCard(true);
+                    hand.DeselectCard(result);
                 }
                 else if (currentCard.HoveringOverGraveyard)
                 {
@@ -104,15 +105,17 @@ public class GameManager : Singleton<GameManager>
         CurrentEvent = card;
     }
    
-    public void InteractWithEvent(Card card)
+    public bool InteractWithEvent(Card card)
     {
-        if (CurrentEvent == null) return;
+        if (CurrentEvent == null) return false;
+        if (CurrentEvent.ResourceType != card.ResourceType) return false;
         CurrentEvent.Interact(card);
         if (CurrentEvent.Value <= 0)
         {
             Destroy(CurrentEvent.gameObject);
             CurrentEvent = null;
         }
+        return true;
     }
 
     public GameMode GetGameMode()

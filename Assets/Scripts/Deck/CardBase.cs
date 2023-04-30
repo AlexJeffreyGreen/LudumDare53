@@ -37,11 +37,12 @@ namespace Assets.Scripts.Deck
             this.RequirementValue = data.RequirementValue;
             this.name = data.Name;
             this.TitleText.text = data.Name;
+            this.ResourceType = data.ResourceType;
         }
 
-        public ResourceType ResourceType { get { return resourceType; } }
-        public int Value { get { return value; } set { this.value = value; } }
-        public int RequirementValue { get { return requirementValue; } set { this.requirementValue = value; } }
+        public ResourceType ResourceType { get { return resourceType; } private set { this.resourceType = value; } }
+        public int Value { get { return value; } protected set { this.value = value; } }
+        public int RequirementValue { get { return requirementValue; } private set { this.requirementValue = value; } }
         protected Image PortraitImage { get { return this.portraitImage; } }
         protected Image BorderImage { get { return this.borderImage; } }
         protected Image TitleImage { get { return this.titleImage; } }

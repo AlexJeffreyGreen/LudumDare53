@@ -362,6 +362,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cards:
   - {fileID: 11400000, guid: 55389fdb342e81445a339d3b9ada14cb, type: 2}
+  - {fileID: 11400000, guid: 8e50d7f4286ac5147bd8c960bb524c81, type: 2}
+  - {fileID: 11400000, guid: fda26c99802526d43834171d0e5d34e1, type: 2}
   eventCards:
   - {fileID: 11400000, guid: 978f236ef4105a340a8b202732102be4, type: 2}
   villagerCards:

@@ -76,7 +76,7 @@ public class Hand : MonoBehaviour
             Cards[i].GetComponent<Card>().SetHandPosition(currentCardPosition);
             //this.transform.d
             Cards[i].transform.DOMove(currentCardPosition, .25f);//.position = currentCardPosition;
-            Debug.Log("Tested after dot tween issue part 2");
+          //  Debug.Log("Tested after dot tween issue part 2");
 
         }
 
