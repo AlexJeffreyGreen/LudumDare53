@@ -1,18 +1,23 @@
 using Assets.Scripts.Deck;
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class Hand : MonoBehaviour
 {
+
+
+    [SerializeField] private int defaultLayer;
+    [SerializeField] int selectedCardLayer;
 
     [SerializeField] Card cardPrefab;
     [SerializeField] int handCount;
     [SerializeField] float maxHandCount;
     [SerializeField] float spacing;
-    [SerializeField] int selectedCardLayer;
-    [SerializeField] int defaultLayer;
+
     [SerializeField] int mousePositionToHandPosition = 350;
     [SerializeField] float offScreenHandDestination;
     [SerializeField] float defaultHandPosition;
@@ -86,40 +91,8 @@ public class Hand : MonoBehaviour
 
         //if (mousePosition.y < )
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector2 rayOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.zero);
-            if (hit.collider != null && hit.collider.gameObject.tag == "Card")
-            {
-
-                selectedCard = hit.collider.gameObject.transform;
-                selectedCard.GetComponent<Card>().ChangeLayerAndAllChildren(selectedCardLayer);
-                selectedCard.transform.SetParent(null);
-               // selectedCard.gameObject.layer = selectedCardLayer;
-            }
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            if (selectedCard != null && !selectedCard.GetComponent<Card>().HoveringOverEvent)
-            {
-                selectedCard.GetComponent<Card>().ChangeLayerAndAllChildren(defaultLayer);
-                selectedCard.SetParent(transform);
-                selectedCard = null;
-            }
-            else if (selectedCard != null && selectedCard.GetComponent<Card>().HoveringOverEvent)
-            {
-                GameManager.Instance.InteractWithEvent(selectedCard.GetComponent<Card>());
-                if(GameManager.Instance.CurrentEvent == null)
-                {
-                    Debug.Log("Destroyed!");
-                }
-                Cards.Remove(selectedCard);
-                Destroy(selectedCard.gameObject);
-                selectedCard = null;
-            }
-            PlaceCardsInHand();
-        }
+       
+        
         if (Input.GetKeyDown(KeyCode.A))
         {
           //  this.DrawCards(1, true);
@@ -145,6 +118,27 @@ public class Hand : MonoBehaviour
         }
     }
 
+    public void SelectCard(Transform transform)
+    {
+        this.selectedCard = transform;
+        this.selectedCard.GetComponent<Card>().ChangeLayerAndAllChildren(selectedCardLayer);
+        this.selectedCard.transform.SetParent(null);
+        this.Cards.Remove(selectedCard);
+    }
 
- 
+    public void DeselectCard(bool destroy = false)
+    {
+        this.selectedCard.GetComponent<Card>().ChangeLayerAndAllChildren(defaultLayer);
+        this.selectedCard.SetParent(transform);
+
+        if( destroy)
+        {
+            Destroy(this.selectedCard.gameObject);
+            //this.Cards.Remove(this.selectedCard);
+        }
+        else
+            this.Cards.Add(this.selectedCard);
+
+        this.selectedCard = null;
+    }
 }

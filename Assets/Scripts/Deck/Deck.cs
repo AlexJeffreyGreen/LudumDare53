@@ -10,6 +10,7 @@ namespace Assets.Scripts.Deck
 {
     public class Deck : MonoBehaviour
     {
+        public CardCollection CardCollection;
         [SerializeField] private Hand hand;
         [SerializeField] private Stack<Card> deck;
         [SerializeField] private int deckSize;
@@ -22,7 +23,7 @@ namespace Assets.Scripts.Deck
             for(int i = 0; i < deckSize; i++)
             {
                 Card tmp = Instantiate<Card>(cardPrefab, this.transform);
-                List<CardData> data = GameManager.Instance.RetrieveRandomCardData(CardType.Card, 1, true);
+                List<CardData> data = CardCollection.RetrieveRandomCardData(CardType.Card, 1, true);//GameManager.Instance.
                 tmp.InitializeCard(data[0]);
                 tmp.gameObject.SetActive(false);
                 //tmp.transform.position = 
@@ -50,6 +51,11 @@ namespace Assets.Scripts.Deck
             
         }
 
+        public Hand GetHand()
+        {
+            return hand;
+        }
+
 
         void DrawCards(int count)
         {
@@ -75,9 +81,53 @@ namespace Assets.Scripts.Deck
             UpdateText();
         }
 
+        public void ResetHand()
+        {
+            AddCards(this.hand.Cards);
+            this.hand.Cards = new List<Transform>();
+        }
+
+        public void AddCards(List<Transform> cards)
+        {
+            foreach (Transform card in cards)
+            {
+                Card tmp = card.GetComponent<Card>();
+                tmp.transform.SetParent(this.transform);
+                tmp.transform.position = this.transform.position;
+                tmp.gameObject.SetActive(false);
+                this.deck.Push(tmp);
+            }
+            this.deck.Shuffle();
+            UpdateText();
+        }
+
         void UpdateText()
         {
             this.currentCount.text = $"{deck.Count}/{deckSize}";
         }
+
+
+
+
+
     }
+}
+
+public static class Extensions
+{
+    public static void Shuffle<T>(this Stack<T> stack)
+    {
+        var values = stack.ToArray();
+        stack.Clear();
+        foreach (var value in values.OrderBy(x => UnityEngine.Random.Range(0, stack.Count)))
+            stack.Push(value);
+    }
+}
+
+
+public enum CardType
+{
+    Card,
+    Event,
+    Request
 }
