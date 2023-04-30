@@ -61,7 +61,7 @@ namespace Assets.Scripts.Deck
         {
             //List<CardData> drawnCards = //GameManager.Instance.RetrieveRandomCardData(CardType.Card, count, random);
             if (this.deck.Count <= 0) { return; }
-            if (this.hand.Cards.Count >= 7) { return; }
+            if (this.hand.Cards.Count >= this.hand.MaxHandCount) { return; }
 
 
             List<Card> drawnCards = new List<Card>();

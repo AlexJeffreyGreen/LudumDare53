@@ -1952,8 +1952,8 @@ MonoBehaviour:
   selectedCardLayer: 0
   cardPrefab: {fileID: 7021279473824291238, guid: 4061e013375bd1d4086fceadb9ce4b61, type: 3}
   handCount: 0
-  maxHandCount: 0
   spacing: 0.05
+  MaxHandCount: 6
   mousePositionToHandPosition: 350
   offScreenHandDestination: -3
   defaultHandPosition: -3

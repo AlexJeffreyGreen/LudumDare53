@@ -14,6 +14,7 @@ namespace Assets.Scripts.Deck
 
         [SerializeField] TMP_Text HealthBarText;
         [SerializeField] TMP_Text RunBarText;
+        public List<CardData> RewardData { get; private set; }
 
         private void Awake()
         {
@@ -24,6 +25,7 @@ namespace Assets.Scripts.Deck
         {
             base.InitializeCard(data);
             this.UpdateInformationText();
+            this.RewardData = CardCollection.Instance.RetrieveRandomCardData(CardType.Card, UnityEngine.Random.Range(0, this.RequirementValue), true);
         }
 
         private void Update()

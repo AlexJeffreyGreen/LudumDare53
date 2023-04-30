@@ -15,9 +15,9 @@ public class Hand : MonoBehaviour
 
     [SerializeField] Card cardPrefab;
     [SerializeField] int handCount;
-    [SerializeField] float maxHandCount;
-    [SerializeField] float spacing;
 
+    [SerializeField] float spacing;
+    public int MaxHandCount;
     [SerializeField] int mousePositionToHandPosition = 350;
     [SerializeField] float offScreenHandDestination;
     [SerializeField] float defaultHandPosition;
@@ -145,6 +145,8 @@ public class Hand : MonoBehaviour
         Card card = Instantiate<Card>(cardPrefab, this.transform); 
         CardData data = CardCollection.Instance.RetrieveCardOfSpecificType(eventCard.ResourceType, eventCard.Value);
         card.InitializeCard(data);
+        //selectedCard = card.transform;
+        //Debug.Log("TODO: TEST HERE.");
         Cards.Add(card.transform);
         this.PlaceCardsInHand();
     }

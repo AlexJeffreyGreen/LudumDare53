@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
+   
     [SerializeField] private int reputationPoints;
     [SerializeField] private EventCard eventCardPrefab;
     [SerializeField] private Vector3 eventCardPosition = Vector3.zero;
@@ -31,6 +32,30 @@ public class GameManager : Singleton<GameManager>
     // Update is called once per frame
     void Update()
     {
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector2 rayOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.zero);
+            if (hit.collider != null)
+            {
+                switch (hit.collider.gameObject.tag)
+                {
+                    case "Card":
+                        hand.SelectCard(hit.collider.gameObject.transform);
+                        break;
+                    case "Event":
+                        if (CurrentEvent.Boon)
+                        {
+                            hand.AddCard(hit.collider.gameObject.transform);
+                            this.InteractWithEvent();
+                            Evaluate();
+                        }
+                        break;
+                }
+
+            }
+        }
 
         if (Input.GetMouseButtonUp(0))
         {
@@ -62,29 +87,7 @@ public class GameManager : Singleton<GameManager>
 
         }
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector2 rayOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.zero);
-            if (hit.collider != null)
-            {
-                switch (hit.collider.gameObject.tag)
-                {
-                    case "Card":
-                        hand.SelectCard(hit.collider.gameObject.transform);
-                        break;
-                    case "Event":
-                        if (CurrentEvent.Boon)
-                        {
-                            hand.AddCard(hit.collider.gameObject.transform);
-                            this.InteractWithEvent();
-                            Evaluate();
-                        }
-                        break;
-                }
-
-            }
-        }
+       
     }
 
     public void Evaluate()
