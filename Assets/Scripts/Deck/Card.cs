@@ -16,6 +16,7 @@ public class Card : CardBase
     
     private bool isHovering;
     public bool HoveringOverEvent;
+    public bool HoveringOverGraveyard;
     //public void InitializeCard(CardData data) 
     //{
      
@@ -35,7 +36,7 @@ public class Card : CardBase
     // Update is called once per frame
     void Update()
     {
-
+        //Debug.Log("Hovering over graveyard: " + HoveringOverGraveyard);
         //if (Input.GetMouseButtonUp(0) && HoveringOverEvent)
         //{
         //    Destroy(this.gameObject);
@@ -81,6 +82,8 @@ public class Card : CardBase
     {
         if (collision.gameObject.tag == "Event")
             HoveringOverEvent = true;
+        if (collision.gameObject.tag == "Graveyard")
+            HoveringOverGraveyard = true;
 
         //overlapping of graveyard
     }
@@ -89,6 +92,8 @@ public class Card : CardBase
     {
         if (collision.gameObject.tag == "Event")
             HoveringOverEvent = false;
+        if (collision.gameObject.tag == "Graveyard")
+            HoveringOverGraveyard = false;
         // if (collision == null) return;
         // Debug.Log("Card Exited Overlap with: " + collision.gameObject.name);
     }

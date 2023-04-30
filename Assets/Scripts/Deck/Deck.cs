@@ -60,7 +60,8 @@ namespace Assets.Scripts.Deck
         void DrawCards(int count)
         {
             //List<CardData> drawnCards = //GameManager.Instance.RetrieveRandomCardData(CardType.Card, count, random);
-            if (this.deck.Count <= 0) { throw new Exception("Empty deck."); }
+            if (this.deck.Count <= 0) { return; }
+            if (this.hand.Cards.Count >= 7) { return; }
 
 
             List<Card> drawnCards = new List<Card>();

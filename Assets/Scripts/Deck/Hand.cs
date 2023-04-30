@@ -89,20 +89,6 @@ public class Hand : MonoBehaviour
     void Update()
     {
 
-       // Debug.Log("test in update");
-        //if (mousePosition.y < )
-
-       
-        
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Debug.Log("Test");
-          //  this.DrawCards(1, true);
-        }
-
-        //if (selectedCard != null)
-        //    Debug.Log(selectedCard.gameObject.layer);
-       
     }
 
     void FixedUpdate()

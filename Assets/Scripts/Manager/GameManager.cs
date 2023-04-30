@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
-
+    [SerializeField] private int reputationPoints;
     [SerializeField] private EventCard eventCardPrefab;
     [SerializeField] private Vector3 eventCardPosition = Vector3.zero;
     [SerializeField] private EventSystem eventSystem;
@@ -34,21 +34,31 @@ public class GameManager : Singleton<GameManager>
 
         if (Input.GetMouseButtonUp(0))
         {
-            if (hand.selectedCard != null && !hand.selectedCard.GetComponent<Card>().HoveringOverEvent)
-            {
-                hand.DeselectCard();
-            }
-            else if (hand.selectedCard != null && hand.selectedCard.GetComponent<Card>().HoveringOverEvent)
-            {
-                this.InteractWithEvent(hand.selectedCard.GetComponent<Card>());
-                if (this.CurrentEvent == null)
+          
+            if (hand.selectedCard != null) {
+                Card currentCard = hand.selectedCard.GetComponent<Card>();
+                if (!currentCard.HoveringOverEvent && !currentCard.HoveringOverGraveyard)
                 {
-                    Debug.Log("Destroyed!");
-                    this.SetGameMode(GameMode.Navigation);
+                    hand.DeselectCard();
                 }
-                hand.DeselectCard(true);
+                else if (currentCard.HoveringOverEvent)
+                {
+                    this.InteractWithEvent(hand.selectedCard.GetComponent<Card>());
+                    if (this.CurrentEvent == null)
+                    {
+                        Debug.Log("Destroyed!");
+                        this.SetGameMode(GameMode.Navigation);
+                    }
+                    hand.DeselectCard(true);
+                }
+                else if (currentCard.HoveringOverGraveyard)
+                {
+                    Debug.Log("Hovering over graveyard and let go of mouse.");
+                    hand.DeselectCard(true);
+                }
+                hand.PlaceCardsInHand();
             }
-            hand.PlaceCardsInHand();
+
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -78,13 +88,16 @@ public class GameManager : Singleton<GameManager>
                 tmp = GameMode.Hunt;
                 break;
         }
+        Debug.Log(tmp.ToString());
         this.SetGameMode(tmp);
         GenerateNewHunt();
     }
 
     private void GenerateNewHunt()
     {
-        List<CardData> cards = this.deck.CardCollection.RetrieveRandomCardData(CardType.Request, 1, true);
+        CardType type = CardType.Request;
+        if (this.gameMode == GameMode.Hunt) { type = CardType.Event; }
+        List<CardData> cards = this.deck.CardCollection.RetrieveRandomCardData(type, 1, true);
         EventCard card = Instantiate<EventCard>(eventCardPrefab);
         card.InitializeCard(cards[0]);
         card.transform.position = eventCardPosition;
@@ -134,5 +147,6 @@ public enum GameMode
     Hunt,
     Loot,
     Run,
-    Navigation
+    Navigation,
+    GameOver
 }
