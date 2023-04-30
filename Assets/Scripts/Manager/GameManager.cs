@@ -34,28 +34,28 @@ public class GameManager : Singleton<GameManager>
 
         if (Input.GetMouseButtonUp(0))
         {
-          
-            if (hand.selectedCard != null) {
+
+            if (hand.selectedCard != null)
+            {
                 Card currentCard = hand.selectedCard.GetComponent<Card>();
                 if (!currentCard.HoveringOverEvent && !currentCard.HoveringOverGraveyard)
                 {
                     hand.DeselectCard();
                 }
-                else if (currentCard.HoveringOverEvent)
+
+                if (currentCard.HoveringOverEvent && !CurrentEvent.Boon)
                 {
                     //not super happy with this addition, but I will keep it because of the time restraint
-                    bool result = this.InteractWithEvent(hand.selectedCard.GetComponent<Card>());
-                    if (this.CurrentEvent == null)
-                    {
-                        Debug.Log("Destroyed!");
-                        this.SetGameMode(GameMode.Navigation);
-                    }
-                    hand.DeselectCard(result);
+                    this.InteractWithEvent(hand.selectedCard.GetComponent<Card>());
+                    hand.DeselectCard(true);
+                    Evaluate();
+                
                 }
                 else if (currentCard.HoveringOverGraveyard)
                 {
                     Debug.Log("Hovering over graveyard and let go of mouse.");
                     hand.DeselectCard(true);
+                    Evaluate();
                 }
                 hand.PlaceCardsInHand();
             }
@@ -66,11 +66,36 @@ public class GameManager : Singleton<GameManager>
         {
             Vector2 rayOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.zero);
-            if (hit.collider != null && hit.collider.gameObject.tag == "Card")
+            if (hit.collider != null)
             {
-                hand.SelectCard(hit.collider.gameObject.transform);
+                switch (hit.collider.gameObject.tag)
+                {
+                    case "Card":
+                        hand.SelectCard(hit.collider.gameObject.transform);
+                        break;
+                    case "Event":
+                        if (CurrentEvent.Boon)
+                        {
+                            hand.AddCard(hit.collider.gameObject.transform);
+                            this.InteractWithEvent();
+                            Evaluate();
+                        }
+                        break;
+                }
+
             }
         }
+    }
+
+    public void Evaluate()
+    {
+        // If there is no longer an event AND the deck is not to excess.
+        if (this.CurrentEvent == null && !this.deck.Excess())
+        {
+            Debug.Log("Destroyed!");
+            this.SetGameMode(GameMode.Navigation);
+        }
+     
     }
     public void Progress()
     {
@@ -98,24 +123,34 @@ public class GameManager : Singleton<GameManager>
     {
         CardType type = CardType.Request;
         if (this.gameMode == GameMode.Hunt) { type = CardType.Event; }
-        List<CardData> cards = this.deck.CardCollection.RetrieveRandomCardData(type, 1, true);
+        List<CardData> cards = CardCollection.Instance.RetrieveRandomCardData(type, 1, true);
         EventCard card = Instantiate<EventCard>(eventCardPrefab);
         card.InitializeCard(cards[0]);
         card.transform.position = eventCardPosition;
         CurrentEvent = card;
     }
    
-    public bool InteractWithEvent(Card card)
+    /// <summary>
+    /// This is horribly messy, but I am tired.
+    /// </summary>
+    /// <param name="card"></param>
+    /// <returns></returns>
+    public void InteractWithEvent(Card card = null)
     {
-        if (CurrentEvent == null) return false;
-        if (CurrentEvent.ResourceType != card.ResourceType) return false;
-        CurrentEvent.Interact(card);
-        if (CurrentEvent.Value <= 0)
+        if (CurrentEvent == null) return;
+        bool result = CurrentEvent.Interact(card);
+
+
+        if (result)
         {
-            Destroy(CurrentEvent.gameObject);
-            CurrentEvent = null;
+            if (CurrentEvent.Value <= 0 || CurrentEvent.Boon)
+            {
+                Destroy(CurrentEvent.gameObject);
+                CurrentEvent = null;
+            }
         }
-        return true;
+
+        return;
     }
 
     public GameMode GetGameMode()

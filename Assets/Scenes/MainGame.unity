@@ -364,10 +364,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 55389fdb342e81445a339d3b9ada14cb, type: 2}
   - {fileID: 11400000, guid: 8e50d7f4286ac5147bd8c960bb524c81, type: 2}
   - {fileID: 11400000, guid: fda26c99802526d43834171d0e5d34e1, type: 2}
+  - {fileID: 11400000, guid: d24a4da348aeed44a8282b9a5a358ef6, type: 2}
   eventCards:
-  - {fileID: 11400000, guid: 978f236ef4105a340a8b202732102be4, type: 2}
+  - {fileID: 11400000, guid: 32810809b57a65e42b289668c055d9ac, type: 2}
   villagerCards:
   - {fileID: 11400000, guid: d9073c2d9f36dab4da1bbf5ad266ff60, type: 2}
+  - {fileID: 11400000, guid: bc673b58e8db98048beb65c5777e94fb, type: 2}
+  - {fileID: 11400000, guid: 3f3deaef6a2f9924d9be07db88cf57c1, type: 2}
 --- !u!4 &253783337
 Transform:
   m_ObjectHideFlags: 0
@@ -2185,7 +2188,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56860be0aee03ce4b9627ecdeb018a15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CardCollection: {fileID: 253783336}
   hand: {fileID: 1861261182}
   deckSize: 15
   cardPrefab: {fileID: 7021279473824291238, guid: 4061e013375bd1d4086fceadb9ce4b61, type: 3}

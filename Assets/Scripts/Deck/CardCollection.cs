@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 
 namespace Assets.Scripts.Deck
@@ -12,6 +13,31 @@ namespace Assets.Scripts.Deck
         [SerializeField] private List<CardData> cards;
         [SerializeField] private List<CardData> eventCards;
         [SerializeField] private List<CardData> villagerCards;
+
+        private static CardCollection _instance;
+        public static CardCollection Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = FindObjectOfType<CardCollection>();
+                    if (_instance == null)
+                    {
+                        GameObject gameObject = new GameObject();
+                        _instance = gameObject.AddComponent<CardCollection>();
+                    }
+                }
+                return _instance;
+            }
+        }
+
+        protected virtual void Awake()
+        {
+            _instance = this as CardCollection;
+            DontDestroyOnLoad(_instance.transform.gameObject);
+        }
+
 
         public List<CardData> Cards
         {
@@ -58,6 +84,22 @@ namespace Assets.Scripts.Deck
             }
             //Random.ne
             return returnData;
+        }
+
+        public CardData RetrieveCardOfSpecificType(ResourceType type, int value)
+        {
+            if (cards == null) throw new Exception("Missing cards");
+            CardData data = null;
+            foreach(CardData card in cards.Where(x=>x.ResourceType == type))
+            {
+                if (card.Value == value)
+                {
+                    data = card; 
+                    break;
+                }
+            }
+            if (data == null) { data = cards.Where(x => x.ResourceType == type).First(); }
+            return data;
         }
     }
 }

@@ -21,10 +21,11 @@ namespace Assets.Scripts.Deck
         [SerializeField] private Image backgroundImage;
         [SerializeField] private TMP_Text descriptionText;
         [SerializeField] private TMP_Text titleText;
+        [SerializeField] private bool boon;
         private BoxCollider2D boxCollider2D;
         private Canvas canvas;
         private RectTransform rectTransform;
-
+        
 
         public virtual void InitializeCard(CardData data)
         {
@@ -38,8 +39,10 @@ namespace Assets.Scripts.Deck
             this.name = data.Name;
             this.TitleText.text = data.Name;
             this.ResourceType = data.ResourceType;
+            this.boon = data.Boon;
         }
 
+        public bool Boon { get { return this.boon; } protected set { this.boon = value; } }
         public ResourceType ResourceType { get { return resourceType; } private set { this.resourceType = value; } }
         public int Value { get { return value; } protected set { this.value = value; } }
         public int RequirementValue { get { return requirementValue; } private set { this.requirementValue = value; } }

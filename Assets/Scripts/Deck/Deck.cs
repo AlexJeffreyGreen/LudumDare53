@@ -10,7 +10,7 @@ namespace Assets.Scripts.Deck
 {
     public class Deck : MonoBehaviour
     {
-        public CardCollection CardCollection;
+        //public CardCollection CardCollection;
         [SerializeField] private Hand hand;
         [SerializeField] private Stack<Card> deck;
         [SerializeField] private int deckSize;
@@ -23,7 +23,7 @@ namespace Assets.Scripts.Deck
             for(int i = 0; i < deckSize; i++)
             {
                 Card tmp = Instantiate<Card>(cardPrefab, this.transform);
-                List<CardData> data = CardCollection.RetrieveRandomCardData(CardType.Card, 1, true);//GameManager.Instance.
+                List<CardData> data = CardCollection.Instance.RetrieveRandomCardData(CardType.Card, 1, true);//GameManager.Instance.
                 tmp.InitializeCard(data[0]);
                 tmp.gameObject.SetActive(false);
                 //tmp.transform.position = 
@@ -108,6 +108,10 @@ namespace Assets.Scripts.Deck
         }
 
 
+        public bool Excess()
+        {
+            return (this.hand.Cards.Count + this.deck.Count > this.deckSize);
+        }
 
 
 

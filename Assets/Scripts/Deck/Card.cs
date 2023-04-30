@@ -17,10 +17,12 @@ public class Card : CardBase
     private bool isHovering;
     public bool HoveringOverEvent;
     public bool HoveringOverGraveyard;
-    //public void InitializeCard(CardData data) 
-    //{
-     
-    //}
+
+    public override void InitializeCard(CardData data)
+    {
+        base.InitializeCard(data);
+        this.Boon = true;
+    }
 
     private void Awake()
     {

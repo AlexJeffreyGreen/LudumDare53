@@ -24,7 +24,6 @@ namespace Assets.Scripts.Deck
         {
             base.InitializeCard(data);
             this.UpdateInformationText();
-            //this
         }
 
         private void Update()
@@ -45,11 +44,14 @@ namespace Assets.Scripts.Deck
             //Debug.Log("Exited event card");            
         }
 
-        public void Interact(Card card)
+        public bool Interact(Card card = null)
         {
-            if (card.ResourceType != this.ResourceType) { return; }
+            if (card == null && this.Boon) { return true; }
+            if (card == null && !this.Boon) { return false; }
+            if (card.ResourceType != this.ResourceType) { return false; }
             this.Value -= card.Value;
             this.UpdateInformationText();
+            return true;
         }
 
         void UpdateInformationText()

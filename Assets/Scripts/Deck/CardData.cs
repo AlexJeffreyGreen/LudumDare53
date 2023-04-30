@@ -20,6 +20,7 @@ namespace Assets.Scripts.Deck
         public Sprite DescriptionImage;
         public Sprite BorderImage;
         public ResourceType ResourceType;
+        public bool Boon;
     }
 
     public enum ResourceType

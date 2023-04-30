@@ -129,4 +129,23 @@ public class Hand : MonoBehaviour
 
         this.selectedCard = null;
     }
+
+    /// <summary>
+    /// This actually immediately goes to the deck....
+    /// </summary>
+    /// <param name="transform"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public void AddCard(Transform transform)
+    {
+        EventCard eventCard = transform.GetComponent<EventCard>();
+        if (eventCard == null) { throw new NotImplementedException("Maybe in the future you can add special cards."); }
+        //CardData data = new CardData();
+        
+
+        Card card = Instantiate<Card>(cardPrefab, this.transform); 
+        CardData data = CardCollection.Instance.RetrieveCardOfSpecificType(eventCard.ResourceType, eventCard.Value);
+        card.InitializeCard(data);
+        Cards.Add(card.transform);
+        this.PlaceCardsInHand();
+    }
 }
