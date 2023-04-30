@@ -74,8 +74,9 @@ public class Hand : MonoBehaviour
             Vector3 currentCardPosition = new Vector3(x, y + handPosition.y, 0);
             //new Vector3(handPosition.x + x, handPosition.y + y, 0);
             Cards[i].GetComponent<Card>().SetHandPosition(currentCardPosition);
+            //this.transform.d
             Cards[i].transform.DOMove(currentCardPosition, .25f);//.position = currentCardPosition;
-
+            Debug.Log("Tested after dot tween issue part 2");
 
         }
 
@@ -87,14 +88,15 @@ public class Hand : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-  
 
+       // Debug.Log("test in update");
         //if (mousePosition.y < )
 
        
         
         if (Input.GetKeyDown(KeyCode.A))
         {
+            Debug.Log("Test");
           //  this.DrawCards(1, true);
         }
 

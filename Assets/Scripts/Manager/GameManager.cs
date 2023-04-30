@@ -61,21 +61,30 @@ public class GameManager : Singleton<GameManager>
             }
         }
     }
-    public void ProgressHunt()
+    public void Progress()
     {
         GameObject clickedButton = EventSystem.current.currentSelectedGameObject;
         string buttonName = clickedButton.name;
 
         Debug.Log("Clicked button " + buttonName);
         steps.Enqueue(buttonName); // maybe I will do something with this
-
-        this.SetGameMode(GameMode.Hunt);
+        GameMode tmp = GameMode.Navigation;
+        switch (buttonName)
+        {
+            case "Village":
+                tmp = GameMode.Village;
+                break;
+            default:
+                tmp = GameMode.Hunt;
+                break;
+        }
+        this.SetGameMode(tmp);
         GenerateNewHunt();
     }
 
     private void GenerateNewHunt()
     {
-        List<CardData> cards = this.deck.CardCollection.RetrieveRandomCardData(CardType.Event, 1, true);
+        List<CardData> cards = this.deck.CardCollection.RetrieveRandomCardData(CardType.Request, 1, true);
         EventCard card = Instantiate<EventCard>(eventCardPrefab);
         card.InitializeCard(cards[0]);
         card.transform.position = eventCardPosition;
@@ -111,7 +120,9 @@ public class GameManager : Singleton<GameManager>
                 this.navigationalCanvas.gameObject.SetActive(true);
                 this.deck.ResetHand();//(this.deck.GetHand());
                 break;
-            default: break;
+            default:
+                this.deck.ResetHand();
+                break;
         }
     }
 }

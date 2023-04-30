@@ -11,6 +11,7 @@ namespace Assets.Scripts.Deck
     {
         [SerializeField] private List<CardData> cards;
         [SerializeField] private List<CardData> eventCards;
+        [SerializeField] private List<CardData> villagerCards;
 
         public List<CardData> Cards
         {
@@ -39,7 +40,7 @@ namespace Assets.Scripts.Deck
                     tmpCollection = eventCards;
                     break;
                 case CardType.Request:
-                    throw new System.NotImplementedException("Requests not implemented yet");
+                    tmpCollection = villagerCards;
                     break;
                 default:
                     tmpCollection = cards;
