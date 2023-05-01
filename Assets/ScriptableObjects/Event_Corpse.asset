@@ -13,14 +13,12 @@ MonoBehaviour:
   m_Name: Event_Corpse
   m_EditorClassIdentifier: 
   Name: Corpse
-  Description: Fresh and bones
   RewardValue: 1
   RequirementValue: 1
   RunValue: 1
-  Image: {fileID: -607008648, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
+  PortraitImage: {fileID: 427787682, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
   BackgroundImage: {fileID: -1348238638, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   TitleImage: {fileID: -1471863871, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
-  DescriptionImage: {fileID: -2114235252, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   BorderImage: {fileID: 1679396883, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   RewardImage: {fileID: -1016631804, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
   RequirementImage: {fileID: -1016631804, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}

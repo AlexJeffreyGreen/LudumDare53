@@ -21,10 +21,7 @@ public class Card : CardBase
     public override void InitializeCard(CardData data)
     {
         base.InitializeCard(data);
-        if (this.Boon)
-        {
-          
-        }
+
         //this.Boon = true;
     }
 

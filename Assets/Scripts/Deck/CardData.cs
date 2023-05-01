@@ -11,14 +11,14 @@ namespace Assets.Scripts.Deck
     public class CardData : ScriptableObject
     {
         public string Name;
-        public string Description;
+        //public string Description;
         public int RewardValue;
         public int RequirementValue;
         public int RunValue;
-        public Sprite Image;
+        public Sprite PortraitImage;
         public Sprite BackgroundImage;
         public Sprite TitleImage;
-        public Sprite DescriptionImage;
+        //public Sprite DescriptionImage;
         public Sprite BorderImage;
         public Sprite RewardImage;
         public Sprite RequirementImage;

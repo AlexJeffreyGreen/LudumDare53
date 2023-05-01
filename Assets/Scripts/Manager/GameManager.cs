@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
-
+    public Transform textPopup;
     [SerializeField] private int maxReputation;
     [SerializeField] private int reputationPoints;
     [SerializeField] private EventCard eventCardPrefab;

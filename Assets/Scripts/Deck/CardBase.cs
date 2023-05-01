@@ -17,10 +17,10 @@ namespace Assets.Scripts.Deck
         [SerializeField] private int requirementValue;
         [SerializeField] private Image portraitImage;
         [SerializeField] private Image borderImage;
-        [SerializeField] private Image titleImage;
-        [SerializeField] private Image descriptionImage;
+        [SerializeField] private Transform requirementTransform;
+        //[SerializeField] private Image descriptionImage;
         [SerializeField] private Image backgroundImage;
-        [SerializeField] private TMP_Text descriptionText;
+        //[SerializeField] private TMP_Text descriptionText;
         [SerializeField] private TMP_Text titleText;
         [SerializeField] private bool boon;
         [SerializeField] private CardType cardType;
@@ -32,12 +32,9 @@ namespace Assets.Scripts.Deck
 
         public virtual void InitializeCard(CardData data)
         {
-            this.PortraitImage.sprite = data.Image;
-            this.DescriptionText.text = data.Description;
+            this.PortraitImage.sprite = data.PortraitImage;
             this.BorderImage.sprite = data.BorderImage;
             this.BackgroundImage.sprite = data.BackgroundImage;
-            this.TitleImage.sprite = data.TitleImage;
-          
             this.rewardValue = data.RewardValue;
             this.requirementValue = data.RequirementValue;
             this.runValue = data.RunValue;
@@ -47,7 +44,7 @@ namespace Assets.Scripts.Deck
             this.boon = data.Boon;
             this.cardType = data.CardType;
             this.rewardType = data.RewardType;
-            this.rewardData = CardCollection.Instance.RetrieveCardsOfSpecificType(this.rewardType, this.rewardValue);//CardCollection.Instance.RetrieveRandomCardData(CardType.Card, UnityEngine.Random.Range(0, this.RewardValue + 1), true);
+            this.rewardData = CardCollection.Instance.RetrieveCardsOfSpecificType(this.rewardType, this.rewardValue);
         }
 
         /// <summary>
@@ -65,6 +62,8 @@ namespace Assets.Scripts.Deck
             return null;
         }
 
+        public Transform RequirementTransform { get { return this.requirementTransform; } }
+
         public bool Boon { get { return this.boon; } }
         public CardType CardType { get { return this.cardType; } }
         public ResourceType ResourceType { get { return resourceType; }  }
@@ -74,11 +73,10 @@ namespace Assets.Scripts.Deck
         public int RequirementValue { get { return requirementValue; } }
         protected Image PortraitImage { get { return this.portraitImage; } }
         protected Image BorderImage { get { return this.borderImage; } }
-        protected Image TitleImage { get { return this.titleImage; } }
         protected Image BackgroundImage { get { return this.backgroundImage; } }    
 
         protected TMP_Text TitleText { get { return this.titleText; } }
-        protected TMP_Text DescriptionText { get { return this.descriptionText; } }
+        //protected TMP_Text DescriptionText { get { return this.descriptionText; } }
         protected BoxCollider2D BoxCollider2D { get { if (this.boxCollider2D == null) { this.boxCollider2D = this.GetComponent<BoxCollider2D>(); } return this.boxCollider2D; } }
         
         protected RectTransform RectTransform { get { if (this.rectTransform == null) { this.rectTransform = this.GetComponent<RectTransform>(); } return this.rectTransform; } }

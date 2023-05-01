@@ -32,6 +32,10 @@ namespace Assets.Scripts.Deck
             this.requirementImage.sprite = data.RequirementImage;
             this.rewardImage.sprite = data.RewardImage;
             this.runImage.sprite = data.RunImage;
+            if (this.Boon)
+            {
+                this.RequirementTransform.gameObject.SetActive(false);
+            }
             this.UpdateInformationText();
          //   this.RewardData = CardCollection.Instance.RetrieveRandomCardData(CardType.Card, UnityEngine.Random.Range(0, this.RewardValue), true);
         }
