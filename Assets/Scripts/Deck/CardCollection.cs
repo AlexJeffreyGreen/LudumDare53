@@ -86,19 +86,13 @@ namespace Assets.Scripts.Deck
             return returnData;
         }
 
-        public CardData RetrieveCardOfSpecificType(ResourceType type, int value)
+        public List<CardData> RetrieveCardsOfSpecificType(ResourceType type, int amount)
         {
             if (cards == null) throw new Exception("Missing cards");
-            CardData data = null;
-            foreach(CardData card in cards.Where(x=>x.ResourceType == type))
-            {
-                if (card.RequirementValue == value)
-                {
-                    data = card; 
-                    break;
-                }
-            }
-            if (data == null) { data = cards.Where(x => x.ResourceType == type).First(); }
+            if (type == ResourceType.Rep) return null;
+            List<CardData> data = new List<CardData>();
+            for (int i = 0; i < amount; i++)
+                data.Add(cards.Where(x => x.ResourceType == type).First());
             return data;
         }
     }

@@ -24,10 +24,11 @@ namespace Assets.Scripts.Deck
         [SerializeField] private TMP_Text titleText;
         [SerializeField] private bool boon;
         [SerializeField] private CardType cardType;
+        [SerializeField] private ResourceType rewardType;
         private BoxCollider2D boxCollider2D;
         private Canvas canvas;
         private RectTransform rectTransform;
-        
+        private List<CardData> rewardData;
 
         public virtual void InitializeCard(CardData data)
         {
@@ -36,6 +37,7 @@ namespace Assets.Scripts.Deck
             this.BorderImage.sprite = data.BorderImage;
             this.BackgroundImage.sprite = data.BackgroundImage;
             this.TitleImage.sprite = data.TitleImage;
+          
             this.rewardValue = data.RewardValue;
             this.requirementValue = data.RequirementValue;
             this.runValue = data.RunValue;
@@ -44,6 +46,8 @@ namespace Assets.Scripts.Deck
             this.resourceType = data.ResourceType;
             this.boon = data.Boon;
             this.cardType = data.CardType;
+            this.rewardType = data.RewardType;
+            this.rewardData = CardCollection.Instance.RetrieveCardsOfSpecificType(this.rewardType, this.rewardValue);//CardCollection.Instance.RetrieveRandomCardData(CardType.Card, UnityEngine.Random.Range(0, this.RewardValue + 1), true);
         }
 
         /// <summary>
@@ -51,21 +55,22 @@ namespace Assets.Scripts.Deck
         /// </summary>
         /// <param name="card"></param>
         /// <returns></returns>
-        public virtual CardData Interact(CardBase card)
+        public virtual List<CardData> Interact(CardBase card)
         {
-            if (this.Boon) return CardCollection.Instance.RetrieveCardOfSpecificType(this.ResourceType, 1);
+            if (this.Boon) return rewardData; //return CardCollection.Instance.RetrieveCardOfSpecificType(this.RewardType, this.RewardValue);
             if (card == null) return null; 
             if (card.ResourceType !=  this.ResourceType) return null;
             this.requirementValue -= card.requirementValue;
-            if (this.requirementValue <= 0) return CardCollection.Instance.RetrieveRandomCardData(CardType.Card, 1, true).First();
+            if (this.requirementValue <= 0) return rewardData;//return CardCollection.Instance.RetrieveCardOfSpecificType(this.RewardType, this.RewardValue);
             return null;
         }
 
         public bool Boon { get { return this.boon; } }
         public CardType CardType { get { return this.cardType; } }
         public ResourceType ResourceType { get { return resourceType; }  }
+        public ResourceType RewardType { get { return rewardType; } }   
         public int RewardValue { get { return this.rewardValue; } }
-        public int RunValue { get { return this.runValue; }  }
+        public int RunValue { get { return this.runValue; }  set{ this.runValue = value; } }
         public int RequirementValue { get { return requirementValue; } }
         protected Image PortraitImage { get { return this.portraitImage; } }
         protected Image BorderImage { get { return this.borderImage; } }

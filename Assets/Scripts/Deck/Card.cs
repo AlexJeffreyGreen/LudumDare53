@@ -21,6 +21,10 @@ public class Card : CardBase
     public override void InitializeCard(CardData data)
     {
         base.InitializeCard(data);
+        if (this.Boon)
+        {
+          
+        }
         //this.Boon = true;
     }
 
@@ -50,6 +54,7 @@ public class Card : CardBase
     public void SetHandPosition(Vector3 newPositon)
     {
         this.handPosition = newPositon;
+        Debug.Log("test");
     }
 
     private void OnMouseEnter()

@@ -22,6 +22,10 @@ MonoBehaviour:
   TitleImage: {fileID: -1509057166, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   DescriptionImage: {fileID: 625507651, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   BorderImage: {fileID: 1679396883, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
+  RewardImage: {fileID: 1770351334, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
+  RequirementImage: {fileID: -440439948, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
+  RunImage: {fileID: 1769180180, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
   ResourceType: 2
+  RewardType: 4
   Boon: 0
   CardType: 2

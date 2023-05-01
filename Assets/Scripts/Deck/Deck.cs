@@ -158,16 +158,16 @@ namespace Assets.Scripts.Deck
                 this.currentCount.color = Color.white;
             this.currentCount.text = $"{this.deck.Count}/{deckSize}";
 
-            int waterCount = this.deck.Where(x => x.ResourceType == ResourceType.Water).Count();// + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Water).Count();
-            int foodCount = this.deck.Where(x => x.ResourceType == ResourceType.Food).Count();// + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Food).Count();
-            int weaponCount = this.deck.Where(x => x.ResourceType == ResourceType.Weapon).Count();// + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Weapon).Count();
-            int woodCount = this.deck.Where(x => x.ResourceType == ResourceType.Wood).Count();// + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Wood).Count();
+            int waterCount = this.deck.Where(x => x.ResourceType == ResourceType.Water).Count() + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Water).Count();
+            int foodCount = this.deck.Where(x => x.ResourceType == ResourceType.Food).Count() + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Food).Count();
+            int weaponCount = this.deck.Where(x => x.ResourceType == ResourceType.Weapon).Count() + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Weapon).Count();
+            int woodCount = this.deck.Where(x => x.ResourceType == ResourceType.Wood).Count() + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Wood).Count();
 
 
-            this.currentWaterCount.text = $"Water: {waterCount}";
-            this.currentFoodCount.text = $"Food: {foodCount}";
-            this.currentWeaponCount.text = $"Weapon(s): {weaponCount}";
-            this.currentWoodCount.text = $"Wood: {woodCount}";
+            this.currentWaterCount.text = $": {waterCount}";
+            this.currentFoodCount.text = $": {foodCount}";
+            this.currentWeaponCount.text = $": {weaponCount}";
+            this.currentWoodCount.text = $": {woodCount}";
         }
 
 

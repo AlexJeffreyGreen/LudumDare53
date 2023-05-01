@@ -16,10 +16,10 @@ namespace Assets.Scripts.Deck
         [SerializeField] TMP_Text rewardText;
         [SerializeField] TMP_Text runText;
         [SerializeField] TMP_Text requirementText;
-        [SerializeField] Image rewardImage;
-        [SerializeField] Image runImage;
-        [SerializeField] Image requirementImage;
-        public List<CardData> RewardData { get; private set; }
+        [SerializeField] private Image rewardImage;
+        [SerializeField] private Image runImage;
+        [SerializeField] private Image requirementImage;
+       
 
         private void Awake()
         {
@@ -29,8 +29,11 @@ namespace Assets.Scripts.Deck
         public override void InitializeCard(CardData data)
         {
             base.InitializeCard(data);
+            this.requirementImage.sprite = data.RequirementImage;
+            this.rewardImage.sprite = data.RewardImage;
+            this.runImage.sprite = data.RunImage;
             this.UpdateInformationText();
-            this.RewardData = CardCollection.Instance.RetrieveRandomCardData(CardType.Card, UnityEngine.Random.Range(0, this.RequirementValue), true);
+         //   this.RewardData = CardCollection.Instance.RetrieveRandomCardData(CardType.Card, UnityEngine.Random.Range(0, this.RewardValue), true);
         }
 
         private void Update()
@@ -51,17 +54,17 @@ namespace Assets.Scripts.Deck
             //Debug.Log("Exited event card");            
         }
 
-        public override CardData Interact(CardBase card)
+        public override List<CardData> Interact(CardBase card)
         {
-            CardData result = base.Interact(card);
+            List<CardData> results = base.Interact(card);
             this.UpdateInformationText();
-            return result;
+            return results;
         }
 
         void UpdateInformationText()
         {
             this.rewardText.text = $"+ {this.RewardValue.ToString()}";
-            this.runText.text = $"- {this.RunValue.ToString()}";
+            this.runText.text = $"{this.RunValue.ToString()}";
             this.requirementText.text = this.RequirementValue.ToString();
         }
 
@@ -70,5 +73,14 @@ namespace Assets.Scripts.Deck
             
         }
 
+        /// <summary>
+        /// Action called when calling graveyard actions.
+        /// </summary>
+        /// <param name="value"></param>
+        public void RunAction(int value)
+        {
+            this.RunValue -= value;
+            this.UpdateInformationText();
+        }
     }
 }

@@ -12,35 +12,37 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private int maxReputation;
     [SerializeField] private int reputationPoints;
     [SerializeField] private EventCard eventCardPrefab;
+    [SerializeField] private Card cardPrefab;
     [SerializeField] private Vector3 eventCardPosition = Vector3.zero;
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private Canvas navigationalCanvas;
     [SerializeField] private Button[] navigationalButtons;
     [SerializeField] private Button runButton;
+    [SerializeField] private Button continueButton;
     [SerializeField] private TMP_Text reputationText;
-    private int numberOfSteps;
-    private Queue<string> steps= new Queue<string>();
+    [SerializeField] private List<Card> rewardCards;
     [SerializeField] private Button[] huntingNavigationalButtons;
-    public EventCard CurrentEvent;
-    private GameMode gameMode = GameMode.Navigation; // Default
     [SerializeField] private Deck deck;
     [SerializeField] private Graveyard graveyard;
+    private int numberOfSteps;
+    private Queue<string> steps= new Queue<string>();
+    public EventCard CurrentEvent;
+    private GameMode gameMode = GameMode.Navigation;
     private Hand hand;
-    
 
+    
 
     void Start()
     {
         hand = deck.GetHand();
         SetGameMode(GameMode.Navigation);
+
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        
-
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -51,7 +53,12 @@ public class GameManager : Singleton<GameManager>
                 switch (hit.collider.gameObject.tag)
                 {
                     case "Card":
-                        hand.SelectCard(hit.collider.gameObject.GetComponent<Card>());
+                        Card tmp = hit.collider.gameObject.GetComponent<Card>();
+                        if (rewardCards.Contains(tmp))
+                        {
+                            rewardCards.Remove(tmp);
+                        }
+                        hand.SelectCard(tmp);
                         break;
                     case "Event":
                         if (CurrentEvent.Boon)
@@ -80,45 +87,63 @@ public class GameManager : Singleton<GameManager>
                 {
                     //not super happy with this addition, but I will keep it because of the time restraint
                     this.InteractWithEvent(hand.selectedCard);
-                    
                     Evaluate();
-                
                 }
                 else if (currentCard.HoveringOverGraveyard)
                 {
                     Debug.Log("Hovering over graveyard and let go of mouse.");
                     hand.DeselectCard(true);
+                    if (CurrentEvent != null)
+                    {
+                        CurrentEvent.RunAction(1);
+                    }
                     Evaluate();
                 }
                 hand.PlaceCardsInHand();
             }
-
         }
 
+        //if (Input.GetKeyDown(KeyCode.A))
+        //{
+        //    reputationPoints++;
+        //    UpdateUI();
+        //}
+        //else if (Input.GetKeyDown(KeyCode.S))
+        //{
+        //    reputationPoints--;
+        //    UpdateUI();
+        //}
         if (Input.GetKeyDown(KeyCode.A))
-        {
-            reputationPoints++;
-            UpdateUI();
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
-        {
-            reputationPoints--;
-            UpdateUI();
-        }
+            Debug.Log($"Reward Cards: {rewardCards.Count} | Deck in Excess: {deck.Excess()}");
 
-       
+
+        Evaluate();
     }
 
 
     public void Evaluate()
     {
-        // If there is no longer an event AND the deck is not to excess.
-        if (this.CurrentEvent == null && !this.deck.Excess())
+        if (this.CurrentEvent != null && !this.CurrentEvent.Boon && this.CurrentEvent.RunValue <= 0) 
         {
-            Debug.Log("Destroyed!");
-            this.SetGameMode(GameMode.Navigation);
+            this.runButton.gameObject.SetActive(true);
         }
-     
+        else
+        {
+            this.runButton.gameObject.SetActive(false);
+        }
+        if (this.CurrentEvent == null 
+            && !this.deck.Excess() 
+            && rewardCards.Count == 0 
+            && gameMode != GameMode.Navigation 
+            && hand.selectedCard == null)
+        {
+            this.continueButton.gameObject.SetActive(true);
+            this.runButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            this.continueButton.gameObject.SetActive(false);
+        } 
     }
     public void Progress()
     {
@@ -143,8 +168,8 @@ public class GameManager : Singleton<GameManager>
                 if(this.CurrentEvent != null)
                 {
                     Debug.Log($"Running away from {this.CurrentEvent.name} and losing {this.CurrentEvent.RunValue} points");
-                    if (this.CurrentEvent.CardType == CardType.Request)
-                        this.reputationPoints -= this.CurrentEvent.RunValue;
+                    if (this.CurrentEvent.RewardType == ResourceType.Rep)
+                        this.reputationPoints -= this.CurrentEvent.RewardValue;
                     else
                     {
                         this.deck.RemoveCardsOfResourceType(this.CurrentEvent.ResourceType, this.CurrentEvent.RunValue);
@@ -171,39 +196,52 @@ public class GameManager : Singleton<GameManager>
         card.transform.position = eventCardPosition;
         CurrentEvent = card;
     }
-   
+
     /// <summary>
     /// This is horribly messy, but I am tired.
+    /// Should be able to retrieve the card's reward data if the card is marked as complete...
     /// </summary>
     /// <param name="card"></param>
     /// <returns></returns>
     public void InteractWithEvent(Card card = null)
     {
         if (this.CurrentEvent == null) return;
-        CardData result = this.CurrentEvent.Interact(card);
-        if (result != null)
-        {
-            if (this.CurrentEvent.RequirementValue <= 0 || this.CurrentEvent.Boon)
-            {
-               
-                if (this.hand.selectedCard != null)
-                    this.hand.DeselectCard(!this.CurrentEvent.Boon);
-               
-                if (result != null)
-                {
-                    this.hand.AddCard(result);
-                    if (this.CurrentEvent.CardType == CardType.Request) {
-                        this.reputationPoints += this.CurrentEvent.RewardValue;
-                    }
-                }
 
-                Destroy(this.CurrentEvent.gameObject);
-                this.CurrentEvent = null;
+        ResourceType type = this.CurrentEvent.ResourceType;
+
+        List<CardData> results = this.CurrentEvent.Interact(card);
+
+        //Completed Request, Boon or Not Boon
+
+
+
+        if (results != null && results.Count > 0)
+        {
+            foreach (CardData result in results)
+            {
+
+                Card tmp = Instantiate<Card>(cardPrefab);
+                tmp.InitializeCard(result);
+                tmp.transform.position = new Vector3(0, 3, 0);
+                rewardCards.Add(tmp);
             }
         }
-        else
+        
+        //actually gross :(
+        if (this.CurrentEvent.RequirementValue <= 0 || this.CurrentEvent.Boon)
         {
-            this.hand.DeselectCard(false);
+            if (this.CurrentEvent.RewardType == ResourceType.Rep)
+            {
+                this.reputationPoints += this.CurrentEvent.RewardValue;
+            }
+
+            Destroy(this.CurrentEvent.gameObject);
+            this.CurrentEvent = null;
+        }
+
+        if (card != null)
+        {
+            this.hand.DeselectCard((card.ResourceType == type));
         }
 
         this.deck.UpdateDeckUI(); // this is just pure laziness and lack of time
@@ -227,6 +265,7 @@ public class GameManager : Singleton<GameManager>
         foreach (Button button in navigationalButtons)
             button.gameObject.SetActive(false);
         this.runButton.gameObject.SetActive(false);
+        this.continueButton.gameObject.SetActive(false);
         //this.navigationalCanvas.gameObject.SetActive(false);
         switch (this.gameMode)
         {
@@ -274,7 +313,7 @@ public class GameManager : Singleton<GameManager>
                 break;
         }
         this.deck.UpdateDeckUI();
-        this.reputationText.text = $"Reputation: {this.reputationPoints}/{maxReputation}";
+        this.reputationText.text = $": {this.reputationPoints}";
     }
 
 }

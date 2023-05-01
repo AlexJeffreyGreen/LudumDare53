@@ -20,7 +20,11 @@ namespace Assets.Scripts.Deck
         public Sprite TitleImage;
         public Sprite DescriptionImage;
         public Sprite BorderImage;
+        public Sprite RewardImage;
+        public Sprite RequirementImage;
+        public Sprite RunImage;
         public ResourceType ResourceType;
+        public ResourceType RewardType;
         public bool Boon;
         public CardType CardType;
     }
@@ -31,7 +35,7 @@ namespace Assets.Scripts.Deck
         Food,
         Water,
         Weapon,
-        Shield
+        Rep
     }
 
     public enum CardType
