@@ -32,6 +32,10 @@ namespace Assets.Scripts.Deck
             this.requirementImage.sprite = data.RequirementImage;
             this.rewardImage.sprite = data.RewardImage;
             this.runImage.sprite = data.RunImage;
+     
+            this.RequirementValue = UnityEngine.Random.Range(1, 4);
+            this.RunValue = UnityEngine.Random.Range(1, 4);
+            //this.rewardData = CardCollection.Instance.RetrieveCardsOfSpecificType(this.RewardType, this.RewardValue);
             if (this.Boon)
             {
                 this.RequirementTransform.gameObject.SetActive(false);
@@ -67,7 +71,7 @@ namespace Assets.Scripts.Deck
 
         void UpdateInformationText()
         {
-            this.rewardText.text = $"+ {this.RewardValue.ToString()}";
+            this.rewardText.text = $"{this.RewardValue.ToString()}";
             this.runText.text = $"{this.RunValue.ToString()}";
             this.requirementText.text = this.RequirementValue.ToString();
         }

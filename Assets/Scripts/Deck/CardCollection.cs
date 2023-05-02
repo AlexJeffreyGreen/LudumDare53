@@ -13,6 +13,7 @@ namespace Assets.Scripts.Deck
         [SerializeField] private List<CardData> cards;
         [SerializeField] private List<CardData> eventCards;
         [SerializeField] private List<CardData> villagerCards;
+        public Transform textPopupPrefab;
 
         private static CardCollection _instance;
         public static CardCollection Instance
@@ -35,7 +36,7 @@ namespace Assets.Scripts.Deck
         protected virtual void Awake()
         {
             _instance = this as CardCollection;
-            DontDestroyOnLoad(_instance.transform.gameObject);
+           // DontDestroyOnLoad(_instance.transform.gameObject);
         }
 
 

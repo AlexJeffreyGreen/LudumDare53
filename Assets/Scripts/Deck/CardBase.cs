@@ -28,16 +28,16 @@ namespace Assets.Scripts.Deck
         private BoxCollider2D boxCollider2D;
         private Canvas canvas;
         private RectTransform rectTransform;
-        private List<CardData> rewardData;
+        protected List<CardData> rewardData;
 
         public virtual void InitializeCard(CardData data)
         {
             this.PortraitImage.sprite = data.PortraitImage;
             this.BorderImage.sprite = data.BorderImage;
             this.BackgroundImage.sprite = data.BackgroundImage;
-            this.rewardValue = data.RewardValue;
-            this.requirementValue = data.RequirementValue;
-            this.runValue = data.RunValue;
+            this.rewardValue = this.RewardValue = UnityEngine.Random.Range(1, 4); //data.RewardValue;// UnityEngine.Random.Range(1, 4); //data.RewardValue;
+            this.requirementValue = data.RequirementValue; // UnityEngine.Random.Range(1, 4);//data.RequirementValue;
+            this.runValue = data.RunValue;// UnityEngine.Random.Range(1, 4);
             this.name = data.Name;
             this.TitleText.text = data.Name;
             this.resourceType = data.ResourceType;
@@ -45,6 +45,12 @@ namespace Assets.Scripts.Deck
             this.cardType = data.CardType;
             this.rewardType = data.RewardType;
             this.rewardData = CardCollection.Instance.RetrieveCardsOfSpecificType(this.rewardType, this.rewardValue);
+        }
+
+
+        protected virtual void RandomRewardType()
+        {
+            
         }
 
         /// <summary>
@@ -63,14 +69,14 @@ namespace Assets.Scripts.Deck
         }
 
         public Transform RequirementTransform { get { return this.requirementTransform; } }
-
+        
         public bool Boon { get { return this.boon; } }
         public CardType CardType { get { return this.cardType; } }
         public ResourceType ResourceType { get { return resourceType; }  }
         public ResourceType RewardType { get { return rewardType; } }   
-        public int RewardValue { get { return this.rewardValue; } }
+        public int RewardValue { get { return this.rewardValue; } set { this.rewardValue = value; } }
         public int RunValue { get { return this.runValue; }  set{ this.runValue = value; } }
-        public int RequirementValue { get { return requirementValue; } }
+        public int RequirementValue { get { return requirementValue; } set { this.requirementValue = value; } }
         protected Image PortraitImage { get { return this.portraitImage; } }
         protected Image BorderImage { get { return this.borderImage; } }
         protected Image BackgroundImage { get { return this.backgroundImage; } }    

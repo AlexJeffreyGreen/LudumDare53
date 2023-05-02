@@ -4,13 +4,21 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
     public Transform textPopup;
-    [SerializeField] private int maxReputation;
-    [SerializeField] private int reputationPoints;
+
+
+    [SerializeField] private AudioClip selectedCardClip;
+    [SerializeField] private AudioClip[] graveyardClips;
+    [SerializeField] private AudioClip attackClip;
+    [SerializeField] private AudioClip runClip;
+    [SerializeField] private AudioClip rewardClip;
+    [SerializeField] private AudioClip[] encounterClips;
+
     [SerializeField] private EventCard eventCardPrefab;
     [SerializeField] private Card cardPrefab;
     [SerializeField] private Vector3 eventCardPosition = Vector3.zero;
@@ -19,7 +27,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private Button[] navigationalButtons;
     [SerializeField] private Button runButton;
     [SerializeField] private Button continueButton;
-    [SerializeField] private TMP_Text reputationText;
+
     [SerializeField] private List<Card> rewardCards;
     [SerializeField] private Button[] huntingNavigationalButtons;
     [SerializeField] private Deck deck;
@@ -43,7 +51,6 @@ public class GameManager : Singleton<GameManager>
     // Update is called once per frame
     void Update()
     {
-
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 rayOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -59,12 +66,14 @@ public class GameManager : Singleton<GameManager>
                             rewardCards.Remove(tmp);
                         }
                         hand.SelectCard(tmp);
+                        AudioManager.Instance.RandomSoundEffect(selectedCardClip);
                         break;
                     case "Event":
                         if (CurrentEvent.Boon)
                         {
                             this.InteractWithEvent();
                             Evaluate();
+                            AudioManager.Instance.RandomSoundEffect(rewardClip);
                         }
                         break;
                 }
@@ -85,9 +94,11 @@ public class GameManager : Singleton<GameManager>
 
                 if (currentCard.HoveringOverEvent && !CurrentEvent.Boon)
                 {
+                    AudioManager.Instance.RandomSoundEffect(attackClip);
                     //not super happy with this addition, but I will keep it because of the time restraint
                     this.InteractWithEvent(hand.selectedCard);
                     Evaluate();
+       
                 }
                 else if (currentCard.HoveringOverGraveyard)
                 {
@@ -98,6 +109,7 @@ public class GameManager : Singleton<GameManager>
                         CurrentEvent.RunAction(1);
                     }
                     Evaluate();
+                    AudioManager.Instance.RandomSoundEffect(graveyardClips);
                 }
                 hand.PlaceCardsInHand();
             }
@@ -113,9 +125,12 @@ public class GameManager : Singleton<GameManager>
         //    reputationPoints--;
         //    UpdateUI();
         //}
-        if (Input.GetKeyDown(KeyCode.A))
-            Debug.Log($"Reward Cards: {rewardCards.Count} | Deck in Excess: {deck.Excess()}");
 
+
+        if (this.deck.CheckWin())
+            this.SetGameMode(GameMode.Win);
+        else if (this.deck.CheckLose())
+            this.SetGameMode(GameMode.GameOver);
 
         Evaluate();
     }
@@ -169,12 +184,15 @@ public class GameManager : Singleton<GameManager>
                 {
                     Debug.Log($"Running away from {this.CurrentEvent.name} and losing {this.CurrentEvent.RunValue} points");
                     if (this.CurrentEvent.RewardType == ResourceType.Rep)
-                        this.reputationPoints -= this.CurrentEvent.RewardValue;
-                    else
-                    {
-                        this.deck.RemoveCardsOfResourceType(this.CurrentEvent.ResourceType, this.CurrentEvent.RunValue);
-                    }
+                        this.deck.Reputation -= this.CurrentEvent.RewardValue;
+                    Destroy(this.CurrentEvent.gameObject);
+                    this.CurrentEvent = null;
+                    //else
+                    //{
+                    //    this.deck.RemoveCardsOfResourceType(this.CurrentEvent.ResourceType, this.CurrentEvent.RunValue);
+                    //}
                 }
+                AudioManager.Instance.RandomSoundEffect(runClip);
                 Debug.Log("Running away.");
                 break;
             default:
@@ -188,6 +206,7 @@ public class GameManager : Singleton<GameManager>
 
     private void GenerateNewHunt()
     {
+        AudioManager.Instance.RandomSoundEffect(encounterClips);
         CardType type = CardType.Request;
         if (this.gameMode == GameMode.Hunt) { type = CardType.Event; }
         List<CardData> cards = CardCollection.Instance.RetrieveRandomCardData(type, 1, true);
@@ -217,6 +236,9 @@ public class GameManager : Singleton<GameManager>
 
         if (results != null && results.Count > 0)
         {
+            
+            AudioManager.Instance.RandomSoundEffect(rewardClip);
+            //this.deck.Reputation += this.CurrentEvent.RewardValue;
             foreach (CardData result in results)
             {
 
@@ -232,8 +254,10 @@ public class GameManager : Singleton<GameManager>
         {
             if (this.CurrentEvent.RewardType == ResourceType.Rep)
             {
-                this.reputationPoints += this.CurrentEvent.RewardValue;
+                this.deck.Reputation += this.CurrentEvent.RewardValue;
             }
+
+            AudioManager.Instance.RandomSoundEffect(rewardClip);
 
             Destroy(this.CurrentEvent.gameObject);
             this.CurrentEvent = null;
@@ -256,9 +280,9 @@ public class GameManager : Singleton<GameManager>
     public void SetGameMode(GameMode gameMode)
     {
         //last minute hack
-        if (this.reputationPoints > 10)
+        if (this.deck.Reputation > 10)
             gameMode = GameMode.Win;
-        if (this.reputationPoints <= 0)
+        if (this.deck.Reputation <= 0)
             gameMode = GameMode.GameOver;
 
         this.gameMode = gameMode;
@@ -276,19 +300,27 @@ public class GameManager : Singleton<GameManager>
                     Destroy(this.CurrentEvent.gameObject);
                 }
                 break;
-            case GameMode.Win:
-                Debug.Log("You win.");
-                break;
             case GameMode.GameOver:
-                Debug.Log("You lose.");
+                SceneManager.LoadScene(2);
+                break;
+            case GameMode.Win:
+                SceneManager.LoadScene(3);
+               // SceneManager.LoadScene(3);
+                //Debug.Log("You win.");
                 break;
             default:
                 this.deck.ResetHand();
                 break;
         }
-
-        if (this.gameMode != GameMode.Navigation)
+        if (this.gameMode == GameMode.Hunt || this.gameMode == GameMode.Village)
+        {
+            //if (this.gameMode != GameMode.Win 
+            //    && this.gameMode != GameMode.GameOver 
+            //    && this.gameMode != GameMode.Navigation)
             GenerateNewHunt();
+        }
+        //if (this.gameMode != GameMode.Navigation)
+
 
         UpdateUI();
     }
@@ -303,6 +335,7 @@ public class GameManager : Singleton<GameManager>
                     this.runButton.gameObject.SetActive(true);
                 this.deck.gameObject.SetActive(true);
                 this.graveyard.gameObject.SetActive(true);
+                this.deck.UpdateDeckUI();
                 break;
             case GameMode.Navigation:
                 foreach (Button button in navigationalButtons)
@@ -312,10 +345,16 @@ public class GameManager : Singleton<GameManager>
                 this.graveyard.gameObject.SetActive(false);
                 break;
         }
-        this.deck.UpdateDeckUI();
-        this.reputationText.text = $": {this.reputationPoints}";
+
+       // this.reputationText.text = $": {this.reputationPoints}";
     }
 
+
+//    private void OnDestroy()
+//    {
+//        if (CardCollection.Instance != null)
+//            Destroy(CardCollection.Instance.gameObject);
+//    }
 }
 
 

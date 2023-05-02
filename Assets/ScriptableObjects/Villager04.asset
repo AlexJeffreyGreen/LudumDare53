@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54203e0da46b34e42bed23f086b5392d, type: 3}
+  m_Name: Villager04
+  m_EditorClassIdentifier: 
+  Name: Firewood
+  RewardValue: 1
+  RequirementValue: 1
+  RunValue: 2
+  PortraitImage: {fileID: -365964972, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
+  BackgroundImage: {fileID: -1348238638, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
+  TitleImage: {fileID: -1471863871, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
+  BorderImage: {fileID: 1679396883, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
+  RewardImage: {fileID: 1770351334, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
+  RequirementImage: {fileID: 956671253, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
+  RunImage: {fileID: 1769180180, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
+  ResourceType: 0
+  RewardType: 4
+  Boon: 0
+  CardType: 2

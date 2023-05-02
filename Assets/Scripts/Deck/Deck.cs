@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Deck.Fluff;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace Assets.Scripts.Deck
 {
     public class Deck : MonoBehaviour
     {
+        [SerializeField] AudioClip drawCardClip;
         //public CardCollection CardCollection;
         [SerializeField] private Hand hand;
         [SerializeField] private List<Card> deck;
@@ -17,20 +19,40 @@ namespace Assets.Scripts.Deck
         [SerializeField] private Card cardPrefab;
         [SerializeField] private TMP_Text currentCount;
 
+
+        [SerializeField] private int maxReputation;
+        public int Reputation;
+
         [SerializeField] private TMP_Text currentWaterCount;
         [SerializeField] private TMP_Text currentWeaponCount;
         [SerializeField] private TMP_Text currentFoodCount;
         [SerializeField] private TMP_Text currentWoodCount;
+        [SerializeField] private TMP_Text reputationCount;
+
+        [SerializeField] private Popup waterPopupText;
+        [SerializeField] private Popup weaponPopupText;
+        [SerializeField] private Popup foodPopupText;
+        [SerializeField] private Popup woodPopupText;
+        [SerializeField] private Popup reputation;
+       
+
+        private int prevWaterCount;
+        private int prevWeaponCount;
+        private int prevFoodCount;
+        private int prevWoodCount;
+        private int prevReputationCount;
+
+       // [SerializeField] int MaxReputation;
+
         private void Awake()
         {
             deck = new List<Card>();
             for(int i = 0; i < deckSize; i++)
             {
                 Card tmp = Instantiate<Card>(cardPrefab, this.transform);
-                List<CardData> data = CardCollection.Instance.RetrieveRandomCardData(CardType.Card, 1, true);//GameManager.Instance.
+                List<CardData> data = CardCollection.Instance.RetrieveRandomCardData(CardType.Card, 1, true);
                 tmp.InitializeCard(data[0]);
                 tmp.gameObject.SetActive(false);
-                //tmp.transform.position = 
                 deck.Add(tmp);
             }
             UpdateDeckUI();
@@ -52,7 +74,7 @@ namespace Assets.Scripts.Deck
                 }
             }
 
-            
+            UpdateDeckUI();
         }
 
         public Hand GetHand()
@@ -66,6 +88,7 @@ namespace Assets.Scripts.Deck
             if (this.deck.Count <= 0) { return; }
             if (this.hand.Cards.Count >= this.hand.MaxHandCount) { return; }
 
+            AudioManager.Instance.RandomSoundEffect(this.drawCardClip);
 
             List<Card> drawnCards = new List<Card>();
 
@@ -85,6 +108,7 @@ namespace Assets.Scripts.Deck
             }
             hand.PlaceCardsInHand();
             UpdateDeckUI();
+
         }
 
         public void ResetHand()
@@ -144,30 +168,72 @@ namespace Assets.Scripts.Deck
 
         public void UpdateDeckUI()
         {
-            // int count = this.deck.Count;// + hand.Cards.Count;
-            //if (hand.selectedCard != null )
-            //{
-            //    count += 1;
-            //}
-
             int count = this.deck.Count() + this.hand.Cards.Count();
 
             if (count > deckSize)
+            {
                 this.currentCount.color = Color.red;
+                this.currentCount.text = "FULL";
+            }
             else
+            {
                 this.currentCount.color = Color.white;
-            this.currentCount.text = $"{this.deck.Count}/{deckSize}";
+                this.currentCount.text = $"{this.deck.Count}/{deckSize}";
+            }
 
-            int waterCount = this.deck.Where(x => x.ResourceType == ResourceType.Water).Count() + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Water).Count();
-            int foodCount = this.deck.Where(x => x.ResourceType == ResourceType.Food).Count() + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Food).Count();
-            int weaponCount = this.deck.Where(x => x.ResourceType == ResourceType.Weapon).Count() + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Weapon).Count();
-            int woodCount = this.deck.Where(x => x.ResourceType == ResourceType.Wood).Count() + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Wood).Count();
+            int waterCount = this.deck.Where(x => x.ResourceType == ResourceType.Water).Count();// + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Water).Count();
+            int foodCount = this.deck.Where(x => x.ResourceType == ResourceType.Food).Count();// + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Food).Count();
+            int weaponCount = this.deck.Where(x => x.ResourceType == ResourceType.Weapon).Count();// + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Weapon).Count();
+            int woodCount = this.deck.Where(x => x.ResourceType == ResourceType.Wood).Count();// + this.hand.Cards.Where(x => x.ResourceType == ResourceType.Wood).Count();
+            
+            int waterInHand = this.hand.Cards.Where(x => x.ResourceType == ResourceType.Water).Count();
+            int foodInHand = this.hand.Cards.Where(x => x.ResourceType == ResourceType.Food).Count();
+            int weaponInHand = this.hand.Cards.Where(x => x.ResourceType == ResourceType.Weapon).Count();
+            int woodInHand = this.hand.Cards.Where(x => x.ResourceType == ResourceType.Wood).Count();
 
 
-            this.currentWaterCount.text = $": {waterCount}";
-            this.currentFoodCount.text = $": {foodCount}";
-            this.currentWeaponCount.text = $": {weaponCount}";
-            this.currentWoodCount.text = $": {woodCount}";
+            if (waterCount != prevWaterCount)
+            {
+                int diff = waterCount - prevWaterCount;
+                string sign = diff > 0 ? "+" : "";
+                prevWaterCount = waterCount;
+                //this.waterPopupText.SetTextOnChange(sign, diff.ToString(), .5f);
+            }
+            if (foodCount != prevFoodCount)
+            {
+                int diff = foodCount - prevFoodCount;
+                string sign = diff > 0 ? "+" : "";
+                prevFoodCount = foodCount;
+                //this.foodPopupText.SetTextOnChange(sign, diff.ToString(), .5f);
+            }
+            if (weaponCount != prevWeaponCount)
+            {
+                int diff = weaponCount - prevWeaponCount;
+                string sign = diff > 0 ? "+" : "";
+                prevWeaponCount = weaponCount;
+                //this.weaponPopupText.SetTextOnChange(sign, diff.ToString(), .5f);
+            }
+            if (woodCount != prevWoodCount)
+            {
+                int diff = woodCount - prevWoodCount;
+                string sign = diff > 0 ? "+" : "";
+                prevWoodCount = woodCount;
+               // this.woodPopupText.SetTextOnChange(sign, diff.ToString(), .5f);
+            }
+            if (Reputation != prevReputationCount)
+            {
+                int diff = Reputation - prevReputationCount;
+                string sign = diff > 0 ? "+" : "";
+                prevReputationCount = Reputation;
+                this.reputation.SetTextOnChange(sign, diff.ToString(), .5f);
+            }
+
+
+            this.currentWaterCount.text = $": {waterCount} ({waterInHand})";
+            this.currentFoodCount.text = $": {foodCount} ({foodInHand})";
+            this.currentWeaponCount.text = $": {weaponCount} ({weaponInHand})";
+            this.currentWoodCount.text = $": {woodCount} ({woodInHand})";
+            this.reputationCount.text = $": {Reputation}";
         }
 
 
@@ -176,8 +242,22 @@ namespace Assets.Scripts.Deck
             return (this.hand.Cards.Count + this.deck.Count > this.deckSize);
         }
 
+        public bool CheckWin()
+        {
+            if (this.Reputation >= this.maxReputation)
+                return true;
+            return false;
 
 
+           // return this.Reputation;
+        }
+
+        public bool CheckLose()
+        {
+            if ((this.hand.Cards.Count == 0 && this.deck.Count == 0 && this.hand.selectedCard == null) || (this.Reputation <= 0))
+                return true;
+            return false;
+        }
     }
 }
 

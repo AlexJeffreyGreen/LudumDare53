@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Event_Rat
   m_EditorClassIdentifier: 
   Name: Plague Rat
-  RewardValue: 1
-  RequirementValue: 4
-  RunValue: 3
+  RewardValue: 3
+  RequirementValue: 3
+  RunValue: 4
   PortraitImage: {fileID: 21300000, guid: 5dcc46a5545a1da49bbbeab76bcb733f, type: 3}
   BackgroundImage: {fileID: -1348238638, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   TitleImage: {fileID: -1471863871, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}

@@ -15,15 +15,15 @@ MonoBehaviour:
   Name: Spider
   RewardValue: 3
   RequirementValue: 2
-  RunValue: 4
+  RunValue: 1
   PortraitImage: {fileID: 21300000, guid: 575d6ab12253e0749a7bb6a07a1260ca, type: 3}
   BackgroundImage: {fileID: -1348238638, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   TitleImage: {fileID: -1471863871, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   BorderImage: {fileID: 1679396883, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
-  RewardImage: {fileID: -1589835479, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
+  RewardImage: {fileID: 956671253, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
   RequirementImage: {fileID: -440439948, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
   RunImage: {fileID: 1769180180, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
   ResourceType: 2
-  RewardType: 1
+  RewardType: 0
   Boon: 0
   CardType: 1

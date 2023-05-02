@@ -8,6 +8,7 @@ TagManager:
   - Event
   - Deck
   - Graveyard
+  - GameOver
   layers:
   - Default
   - TransparentFX

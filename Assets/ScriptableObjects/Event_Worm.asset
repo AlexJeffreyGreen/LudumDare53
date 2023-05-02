@@ -20,10 +20,10 @@ MonoBehaviour:
   BackgroundImage: {fileID: -1348238638, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   TitleImage: {fileID: -1471863871, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
   BorderImage: {fileID: 1679396883, guid: c55c67913cc09bd4c8af1c82b37d33c7, type: 3}
-  RewardImage: {fileID: -1589835479, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
+  RewardImage: {fileID: -440439948, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
   RequirementImage: {fileID: -1016631804, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
   RunImage: {fileID: 1769180180, guid: 505c8b1c4ce68e94eabba3bb7386f8a6, type: 3}
-  ResourceType: 2
-  RewardType: 1
+  ResourceType: 3
+  RewardType: 2
   Boon: 0
   CardType: 1
