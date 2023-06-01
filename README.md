@@ -5,6 +5,9 @@ Ludum Dare 53 Submission:
 
 **BURNED REPUTATION**
 
+Play here:
+
+https://ldjam.com/events/ludum-dare/53/burned-reputation
 
 **How to play:**
 
