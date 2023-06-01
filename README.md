@@ -13,7 +13,7 @@ Fight monsters, burn cards, deliver resources, and gain reputation!
 Fight for your reputation by delivering requests made by villagers with resource cards you gain while venturing out in the wilderness. 
 
 **How to hunt:**
-![fight.png](///raw/21a/34/z/5a16c.png)
+![image](https://github.com/AlexJeffreyGreen/LudumDare53/assets/9258988/bacf54cc-8ee2-4f25-aaa1-88348bfa35d5)
 
 * Click the hunting button on the main screen to start your hunt!
 
@@ -26,7 +26,7 @@ Fight for your reputation by delivering requests made by villagers with resource
 * Boon cards are specific resource cards that you can take with you and add to your hand. While great to find while out in the wilderness, your deck size limit (hand + deck) can never exceed 15 cards. This means you will be forced to burn as many cards as needed to meet the deck limit. However, you can freely choose which cards to burn from your current hand.
 
 **How to assist villagers:**
-![village.png](///raw/21a/34/z/5a170.png)
+![image](https://github.com/AlexJeffreyGreen/LudumDare53/assets/9258988/2db7b790-db25-4911-9169-d95218e193c9)
 
 * Villagers have specific resource requests that are needed to fulfill a delivery request. You will notice that villagers don't give rewards for completion, but instead give you reputation points (the star icon in your inventory). Get 10 of these and you win! However, running from a villager will burn your reputation... which if it gets to 0, you will be banned from the village forever.
 
